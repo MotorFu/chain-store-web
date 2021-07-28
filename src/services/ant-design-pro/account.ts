@@ -10,9 +10,7 @@ export async function findAccount(
   },
   options?: { [key: string]: any },
 ) {
-  return request<{
-    data: API.AccountList;
-  }>('/api/account', {
+  return request<API.AccountListItem>('/api/account', {
     method: 'GET',
     params: {
       ...params,

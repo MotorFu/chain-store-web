@@ -2,34 +2,41 @@
 /* eslint-disable */
 
 declare namespace API {
-  enum AccountTypeEnum {
-    SuperAdmin = 1,
-    StoreAdmin = 2,
-    Cashier = 3,
-  }
-
-  enum AccountStatusEnum {
-    Normal = 1, //正常
-    Freeze = 2, //冻结
-  }
+  type PageParams = {
+    current?: number;
+    pageSize?: number;
+  };
 
   // 账号列表
   type AccountList = {
-    name?: string;
-    icon?: string;
-    phone?: string;
-    type?: AccountTypeEnum;
-    status?: AccountStatusEnum;
+    data?: AccountListItem[];
+    /** 列表的内容总数 */
+    total?: number;
+    success?: boolean;
   };
 
   type AccountListItem = {
-    name?: string;
+    id?: number;
+    key?: string;
+    username?: string;
     password?: string;
     icon?: string;
     phone?: string;
+    type?: number;
+    status?: number;
+    createdAt?: number;
   };
 
   type StoreList = {
+    data?: StoreListItem[];
+    /** 列表的内容总数 */
+    total?: number;
+    success?: boolean;
+  };
+
+  type StoreListItem = {
+    id?: number;
+    key?: string;
     name?: string;
     icon?: string;
     phone?: string;
@@ -38,48 +45,27 @@ declare namespace API {
     createdTime?: number;
   };
 
-  type StoreListItem = {
-    name?: string;
-    icon?: string;
-    phone?: string;
-    address?: string;
-  };
-
-  enum AccountRoleEnum {
-    Admin = 1,
-    Cashier = 2,
-  }
+  type AccountRole = 1 | 2; // admin | cashier
 
   type AccountStoreRelationList = {
+    data?: AccountStoreRelationItem[];
+    /** 列表的内容总数 */
+    total?: number;
+    success?: boolean;
+  };
+  type AccountStoreRelationItem = {
+    id?: number;
+    key?: string;
     accountId?: number;
     storeId?: number;
     role?: AccountRoleEnum;
     createdTime?: number;
   };
-  type AccountStoreRelationItem = {
-    accountId?: number;
-    storeId?: number;
-    role?: AccountRoleEnum;
-  };
 
   type CurrentUser = {
-    name?: string;
-    avatar?: string;
-    userid?: string;
-    email?: string;
-    signature?: string;
-    title?: string;
-    group?: string;
-    tags?: { key?: string; label?: string }[];
-    notifyCount?: number;
-    unreadCount?: number;
-    country?: string;
-    access?: string;
-    geographic?: {
-      province?: { label?: string; key?: string };
-      city?: { label?: string; key?: string };
-    };
-    address?: string;
+    id?: number;
+    username?: string;
+    icon?: string;
     phone?: string;
   };
 
@@ -87,11 +73,6 @@ declare namespace API {
     status?: string;
     type?: string;
     currentAuthority?: string;
-  };
-
-  type PageParams = {
-    current?: number;
-    pageSize?: number;
   };
 
   type RuleListItem = {
@@ -114,11 +95,6 @@ declare namespace API {
     /** 列表的内容总数 */
     total?: number;
     success?: boolean;
-  };
-
-  type FakeCaptcha = {
-    code?: number;
-    status?: string;
   };
 
   type LoginParams = {

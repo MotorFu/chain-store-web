@@ -45,20 +45,19 @@
 
   {
     path: '/account',
-    name: '账号管理',
+    name: 'account',
     icon: 'crown',
     access: 'canAdmin',
-    component: './Admin',
     routes: [
       {
         path: '/account/page',
-        name: '账号列表',
+        name: 'list',
         icon: 'smile',
-        component: './Welcome',
+        component: './AccountManagement/account',
       },
       {
         path: '/account/store-page',
-        name: '门店列表',
+        name: 'store-list',
         icon: 'smile',
         component: './Welcome',
       },
@@ -70,20 +69,19 @@
 
   {
     path: '/product',
-    name: '商品管理',
+    name: 'product',
     icon: 'crown',
     access: 'canAdmin',
-    component: './Admin',
     routes: [
       {
         path: '/product/page',
-        name: '商品列表',
+        name: 'list',
         icon: 'smile',
         component: './Welcome',
       },
       {
         path: '/product/category-page',
-        name: '分类列表',
+        name: 'category-list',
         icon: 'smile',
         component: './Welcome',
       },
@@ -94,14 +92,19 @@
   },
   {
     path: '/order',
-    name: '订单管理',
+    name: 'order',
     icon: 'crown',
     access: 'canAdmin',
-    component: './Admin',
     routes: [
       {
         path: '/order/page',
-        name: '商品列表',
+        name: 'list',
+        icon: 'smile',
+        component: './Welcome',
+      },
+      {
+        path: '/order/transaction-page',
+        name: 'transaction-list',
         icon: 'smile',
         component: './Welcome',
       },
@@ -113,32 +116,32 @@
 
   {
     path: '/stock',
-    name: '库存管理',
+    name: 'stock',
     icon: 'crown',
     access: 'canAdmin',
     component: './Admin',
     routes: [
       {
-        path: '/stock/page',
-        name: '商品库存列表',
+        path: '/stock/product-page',
+        name: 'product-list',
         icon: 'smile',
         component: './Welcome',
       },
       {
         path: '/stock/purchase-order-page',
-        name: '采购单列表',
+        name: 'purchase-list',
         icon: 'smile',
         component: './Welcome',
       },
       {
         path: '/stock/stock-in-order-page',
-        name: '入库单列表',
+        name: 'stock-in-list',
         icon: 'smile',
         component: './Welcome',
       },
       {
         path: '/stock/take-stock-order-page',
-        name: '盘点单列表',
+        name: 'take-stock-list',
         icon: 'smile',
         component: './Welcome',
       },
@@ -149,26 +152,26 @@
   },
   {
     path: '/stat',
-    name: '数据统计',
+    name: 'stat',
     icon: 'crown',
     access: 'canAdmin',
     component: './Admin',
     routes: [
       {
         path: '/stat/product',
-        name: '商品统计',
+        name: 'product',
         icon: 'smile',
         component: './Welcome',
       },
       {
         path: '/stat/order',
-        name: '订单统计',
+        name: 'order',
         icon: 'smile',
         component: './Welcome',
       },
       {
         path: '/stat/stock',
-        name: '库存统计',
+        name: 'stock',
         icon: 'smile',
         component: './Welcome',
       },
