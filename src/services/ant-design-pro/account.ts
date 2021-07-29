@@ -1,3 +1,5 @@
+// @ts-ignore
+/* eslint-disable */
 import { request } from 'umi';
 
 export async function findAccount(
@@ -7,13 +9,17 @@ export async function findAccount(
     current?: number;
     /** 页面的容量 */
     pageSize?: number;
+
   },
+  sorter?:any, filter?:any,
   options?: { [key: string]: any },
 ) {
   return request<API.AccountListItem>('/api/account', {
     method: 'GET',
     params: {
       ...params,
+      sorter,
+      filter
     },
     ...(options || {}),
   });

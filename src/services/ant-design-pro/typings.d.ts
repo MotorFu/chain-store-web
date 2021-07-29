@@ -16,15 +16,15 @@ declare namespace API {
   };
 
   type AccountListItem = {
-    id?: number;
-    key?: string;
-    username?: string;
+    id: number;
+    key: string;
+    username: string;
     password?: string;
     icon?: string;
     phone?: string;
-    type?: number;
-    status?: number;
-    createdAt?: number;
+    type: number;
+    enabled: boolean;
+    createdTime: number;
   };
 
   type StoreList = {

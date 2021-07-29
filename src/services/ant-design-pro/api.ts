@@ -49,12 +49,16 @@ export async function rule(
     /** 页面的容量 */
     pageSize?: number;
   },
+  sorter?: any,
+  filter?: any,
   options?: { [key: string]: any },
 ) {
   return request<API.RuleList>('/api/rule', {
     method: 'GET',
     params: {
       ...params,
+      sorter,
+      filter
     },
     ...(options || {}),
   });

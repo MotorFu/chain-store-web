@@ -1,53 +1,133 @@
 import { Request, Response } from 'express';
 import dayjs from 'dayjs';
 import { parse } from 'url';
+import { parseInt } from 'lodash';
 
 // mock tableListDataSource
 const genList = (current: number, pageSize: number) => {
+  console.log('account init data');
   const tableListDataSource: API.AccountListItem[] = [];
 
+  tableListDataSource.push({
+    id: 1,
+    key: '1',
+    username: `superAdmin`,
+    icon: 'https://gw.alipayobjects.com/zos/rmsportal/eeHMaZBwmTvLdIwMfBpg.png',
+    phone: '18616352386',
+    enabled: true,
+    type: 1,
+    createdTime: dayjs().valueOf(),
+  });
+
+  tableListDataSource.push({
+    id: 2,
+    key: '2',
+    username: `sysAdmin`,
+    icon: 'https://gw.alipayobjects.com/zos/rmsportal/udxAbMEhpwthVVcjLXik.png',
+    phone: '18616352386',
+    enabled: true,
+    type: 2,
+    createdTime: dayjs().valueOf(),
+  });
   for (let i = 0; i < pageSize; i += 1) {
     const index: number = (current - 1) * 10 + i;
+
     tableListDataSource.push({
-      id: index + 1,
-      key: `${index + 1}`,
+      id: index + 3,
+      key: `${index + 3}`,
       username: `account_ ${index}`,
       icon: [
         'https://gw.alipayobjects.com/zos/rmsportal/eeHMaZBwmTvLdIwMfBpg.png',
         'https://gw.alipayobjects.com/zos/rmsportal/udxAbMEhpwthVVcjLXik.png',
       ][i % 2],
       phone: 18888000000 + i + '',
-      status: 1,
-      createdAt: dayjs().millisecond(),
+      enabled: (i % 4) != 0,
+      type: 3,
+      createdTime: dayjs().valueOf(),
     });
   }
   tableListDataSource.reverse();
   return tableListDataSource;
 };
+//源数据
+const tableListDataSource = genList(1, 20);
 
-let tableListDataSource = genList(1, 100);
+/**
+ * 拷贝数据
+ */
+function cloneDataSource() {
+  const data: API.AccountListItem[] = [];
+  tableListDataSource.forEach(item => {
+    data.push(item);
+  });
+  return data;
+}
 
 function findPage(req: Request, res: Response, u: string) {
+
+  let tempDataSource = cloneDataSource();
   let realUrl = u;
   if (!realUrl || Object.prototype.toString.call(realUrl) !== '[object String]') {
     realUrl = req.url;
   }
   const { current = 1, pageSize = 10 } = req.query;
   const params = parse(realUrl, true).query as unknown as API.PageParams &
-    API.RuleListItem & {
-      sorter: any;
-      filter: any;
-    };
-  let dataSource = [...tableListDataSource].slice(
+    API.AccountListItem & {
+    sorter: any;
+    filter: any;
+    createdTimeRange: number[];
+  };
+  if (params.sorter) {
+    const sorter = JSON.parse(params.sorter);
+
+    tempDataSource = tempDataSource.sort((prev, next) => {
+      let sortNumber = 0;
+      Object.keys(sorter).forEach((key) => {
+        if (sorter[key] === 'descend') {
+          if (prev[key] - next[key] > 0) {
+            sortNumber += -1;
+          } else {
+            sortNumber += 1;
+          }
+          return;
+        }
+        if (prev[key] - next[key] > 0) {
+          sortNumber += 1;
+        } else {
+          sortNumber += -1;
+        }
+      });
+      return sortNumber;
+    });
+  }
+
+  console.log('params----->', params);
+  if (params.username) {
+    tempDataSource = tempDataSource.filter((data) => data?.username?.includes(params.username || ''));
+  }
+  if (params.phone) {
+    tempDataSource = tempDataSource.filter((data) => data?.phone?.includes(params.phone || ''));
+  }
+  if (params.enabled && (String(params.enabled) === 'true' || String(params.enabled) === 'false')) {
+    tempDataSource = tempDataSource.filter((data) => (data?.enabled ? 'true' : 'false') === String(params.enabled));
+  }
+  if (params.type && params.type as number !== 0) {
+
+    tempDataSource = tempDataSource.filter((data) => data?.type == params.type);
+  }
+  if (params.createdTimeRange) {
+    const startDate = dayjs(params.createdTimeRange[0]).valueOf();
+    const endDate = dayjs(params.createdTimeRange[1]).valueOf() + 24 * 3600 * 1000;
+    tempDataSource = tempDataSource.filter((data) => data.createdTime >= startDate && data.createdTime < endDate);
+  }
+
+  let dataSource = [...tempDataSource].slice(
     ((current as number) - 1) * (pageSize as number),
     (current as number) * (pageSize as number),
   );
-  if (params.name) {
-    dataSource = dataSource.filter((data) => data?.username?.includes(params.name || ''));
-  }
   const result = {
     data: dataSource,
-    total: tableListDataSource.length,
+    total: tempDataSource.length,
     success: true,
     pageSize,
     current: parseInt(`${params.current}`, 10) || 1,

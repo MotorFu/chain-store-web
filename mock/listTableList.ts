@@ -19,7 +19,7 @@ const genList = (current: number, pageSize: number) => {
       ][i % 2],
       name: `TradeCode ${index}`,
       owner: '曲丽丽',
-      desc: '这是一段描述',
+      desc: '这是一段描述_'+index,
       callNo: Math.floor(Math.random() * 1000),
       status: Math.floor(Math.random() * 10) % 4,
       updatedAt: moment().format('YYYY-MM-DD'),
@@ -71,6 +71,7 @@ function getRule(req: Request, res: Response, u: string) {
       return sortNumber;
     });
   }
+  console.log("tableList params---->",params)
   if (params.filter) {
     const filter = JSON.parse(params.filter as any) as {
       [key: string]: string[];
