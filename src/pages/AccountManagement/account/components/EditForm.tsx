@@ -1,10 +1,6 @@
 import React from 'react';
 import { Modal } from 'antd';
-import {
-  ProFormText,
-  ProFormUploadButton,
-  StepsForm,
-} from '@ant-design/pro-form';
+import { ProFormText, ProFormUploadButton, StepsForm } from '@ant-design/pro-form';
 
 export type FormValueType = {
   target?: string;
@@ -17,7 +13,7 @@ export type FormValueType = {
 export type UpdateFormProps = {
   onCancel: (flag?: boolean, formVals?: FormValueType) => void;
   onSubmit: (values: FormValueType) => Promise<void>;
-  updateModalVisible: boolean;
+  visible: boolean;
   values: Partial<API.AccountListItem>;
 };
 
@@ -33,8 +29,8 @@ const EditForm: React.FC<UpdateFormProps> = (props) => {
             width={640}
             bodyStyle={{ padding: '32px 40px 48px' }}
             destroyOnClose
-            title={'添加/更新账号'}
-            visible={props.updateModalVisible}
+            title={props.values.id == null ? '添加账号' : '修改账号'}
+            visible={props.visible}
             footer={submitter}
             onCancel={() => {
               props.onCancel();
@@ -48,17 +44,26 @@ const EditForm: React.FC<UpdateFormProps> = (props) => {
     >
       <StepsForm.StepForm
         initialValues={{
-          icon: props.values.icon,
-          name: props.values.username,
-          desc: props.values.phone,
+          username: props.values.username,
+          phone: props.values.phone,
         }}
-        title='基本信息'
+        title="基本信息"
       >
         <ProFormUploadButton
-          extra={'支持扩展名：.jpg .png'}
-          label={'头像'}
-          name="file"
-          title={'上传'}
+          name="icon"
+          label="图片"
+          max={1}
+          fieldProps={{
+            name: 'file',
+            listType: 'picture-card',
+          }}
+          action="/upload.do"
+          rules={[
+            {
+              required: true,
+              message: '请上传图片！',
+            },
+          ]}
         />
         <ProFormText
           name="username"
@@ -73,16 +78,16 @@ const EditForm: React.FC<UpdateFormProps> = (props) => {
         <ProFormText
           name="phone"
           width="md"
-          label='手机号'
-          placeholder='请输入手机号'
+          label="手机号"
+          placeholder="请输入手机号"
           rules={[
             {
               required: true,
-              message: '手机号不能为空'
+              message: '手机号不能为空',
             },
             {
               pattern: /^1\d{10}$/,
-              message:'不合法的手机号格式!',
+              message: '不合法的手机号格式!',
             },
           ]}
         />
@@ -92,12 +97,11 @@ const EditForm: React.FC<UpdateFormProps> = (props) => {
           type: '0',
           relation: {
             storeId: 0,
-            storeName: '门店名称'
+            storeName: '门店名称',
           },
         }}
-        title='账号类型'
-      >
-      </StepsForm.StepForm>
+        title="账号类型"
+      ></StepsForm.StepForm>
     </StepsForm>
   );
 };

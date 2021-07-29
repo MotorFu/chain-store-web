@@ -41,9 +41,11 @@ const genList = (current: number, pageSize: number) => {
         'https://gw.alipayobjects.com/zos/rmsportal/udxAbMEhpwthVVcjLXik.png',
       ][i % 2],
       phone: 18888000000 + i + '',
-      enabled: (i % 4) != 0,
+      enabled: i % 4 != 0,
       type: 3,
-      createdTime: dayjs().valueOf(),
+      createdTime: dayjs()
+        .add(-(pageSize - i), 'day')
+        .valueOf(),
     });
   }
   tableListDataSource.reverse();
@@ -57,14 +59,13 @@ const tableListDataSource = genList(1, 20);
  */
 function cloneDataSource() {
   const data: API.AccountListItem[] = [];
-  tableListDataSource.forEach(item => {
+  tableListDataSource.forEach((item) => {
     data.push(item);
   });
   return data;
 }
 
 function findPage(req: Request, res: Response, u: string) {
-
   let tempDataSource = cloneDataSource();
   let realUrl = u;
   if (!realUrl || Object.prototype.toString.call(realUrl) !== '[object String]') {
@@ -73,10 +74,11 @@ function findPage(req: Request, res: Response, u: string) {
   const { current = 1, pageSize = 10 } = req.query;
   const params = parse(realUrl, true).query as unknown as API.PageParams &
     API.AccountListItem & {
-    sorter: any;
-    filter: any;
-    createdTimeRange: number[];
-  };
+      sorter: any;
+      filter: any;
+      startTime?: string;
+      endTime?: string;
+    };
   if (params.sorter) {
     const sorter = JSON.parse(params.sorter);
 
@@ -101,24 +103,32 @@ function findPage(req: Request, res: Response, u: string) {
     });
   }
 
-  console.log('params----->', params);
+  console.log('params----->', params, typeof params.enabled);
+  if (params.id) {
+    tempDataSource = tempDataSource.filter((data) => data?.id == parseInt(params.id + '', 10));
+  }
   if (params.username) {
-    tempDataSource = tempDataSource.filter((data) => data?.username?.includes(params.username || ''));
+    tempDataSource = tempDataSource.filter((data) =>
+      data?.username?.includes(params.username || ''),
+    );
   }
   if (params.phone) {
     tempDataSource = tempDataSource.filter((data) => data?.phone?.includes(params.phone || ''));
   }
   if (params.enabled && (String(params.enabled) === 'true' || String(params.enabled) === 'false')) {
-    tempDataSource = tempDataSource.filter((data) => (data?.enabled ? 'true' : 'false') === String(params.enabled));
+    tempDataSource = tempDataSource.filter(
+      (data) => (data?.enabled ? 'true' : 'false') === String(params.enabled),
+    );
   }
-  if (params.type && params.type as number !== 0) {
-
+  if (params.type && (params.type as number) !== 0) {
     tempDataSource = tempDataSource.filter((data) => data?.type == params.type);
   }
-  if (params.createdTimeRange) {
-    const startDate = dayjs(params.createdTimeRange[0]).valueOf();
-    const endDate = dayjs(params.createdTimeRange[1]).valueOf() + 24 * 3600 * 1000;
-    tempDataSource = tempDataSource.filter((data) => data.createdTime >= startDate && data.createdTime < endDate);
+  if (params.startTime && params.endTime) {
+    const startTime = dayjs(params.startTime).valueOf();
+    const endTime = dayjs(params.endTime).valueOf() + 24 * 3600 * 1000;
+    tempDataSource = tempDataSource.filter(
+      (data) => data.createdTime >= startTime && data.createdTime < endTime,
+    );
   }
 
   let dataSource = [...tempDataSource].slice(

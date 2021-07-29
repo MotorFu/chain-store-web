@@ -5,11 +5,9 @@ import { Button, Dropdown, Menu, Space, Tag } from 'antd';
 import { PlusOutlined, RightOutlined } from '@ant-design/icons';
 
 import { findAccount, updateAccount } from '@/services/ant-design-pro/account';
-import dayjs from 'dayjs';
 import EditForm from './components/EditForm';
 
 const AccountTable: React.FC = () => {
-  const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const actionRef = useRef<ActionType>();
 
@@ -23,7 +21,6 @@ const AccountTable: React.FC = () => {
       key: 'id',
       dataIndex: 'id',
       sorter: true,
-      sortOrder: 'ascend'
     },
     {
       title: '账号',
@@ -39,94 +36,132 @@ const AccountTable: React.FC = () => {
       title: '账号类型',
       key: 'type',
       dataIndex: 'type',
-      valueEnum:{
-        0:{
-          text:'不限',
-          status:'',
+      valueEnum: {
+        0: {
+          text: '不限',
+          status: '',
         },
-        1:{
-          text:'超级管理员',
-          status:'',
+        1: {
+          text: '超级管理员',
+          status: '',
         },
-        2:{
-          text:'系统管理员',
-          status:'',
+        2: {
+          text: '系统管理员',
+          status: '',
         },
-        3:{
-          text:'门店管理员',
-          status:'',
-        }
+        3: {
+          text: '门店管理员',
+          status: '',
+        },
       },
       render: (dom, item) => {
         if (item.type === 1) {
-          return <Tag color="success" key={item.key}>超级管理员</Tag>;
+          return (
+            <Tag color="success" key={item.key}>
+              超级管理员
+            </Tag>
+          );
         }
         if (item.type === 2) {
-          return <Tag color="#2db7f5" key={item.key}>系统管理员</Tag>;
+          return (
+            <Tag color="#2db7f5" key={item.key}>
+              系统管理员
+            </Tag>
+          );
         }
-        return <Tag color="#108ee9" key={item.key}>门店管理员</Tag>;
-      }
+        return (
+          <Tag color="#108ee9" key={item.key}>
+            门店管理员
+          </Tag>
+        );
+      },
     },
     {
       title: '账号状态',
       key: 'enabled',
       dataIndex: 'enabled',
-      valueType:'select',
+      valueType: 'select',
       initialValue: '0',
-      valueEnum:{
-        0:{
-          text:'不限',
-          status:'',
+      valueEnum: {
+        0: {
+          text: '不限',
+          status: '',
         },
-        true:{
-          text:'已启用',
-          checked:true,
-          status:'',
+        true: {
+          text: '已启用',
+          checked: true,
+          status: '',
         },
-        false:{
-          text:'已禁用',
-          checked:false,
-          status:'',
-        }
+        false: {
+          text: '已禁用',
+          checked: false,
+          status: '',
+        },
       },
-      render: (dom,item) => {
+      render: (dom, item) => {
         if (item.enabled) {
           return <Tag color="success">已启用</Tag>;
         }
         return <Tag color="error">已禁用</Tag>;
-      }
+      },
     },
     {
       title: '创建时间',
-      key: 'createdTimeRang',
-      dataIndex: 'createdTimeRang',
-      valueType: 'dateRange',
+      key: 'createdTime',
+      dataIndex: 'createdTime',
+      valueType: 'dateTime',
       sorter: true,
-      render(dom: any, item) {
-
-        return dayjs(item.createdTime).format('YYYY-MM-DD HH:mm:ss');
-      }
+      hideInSearch: true,
+    },
+    {
+      title: '创建时间',
+      dataIndex: 'createdTime',
+      valueType: 'dateRange',
+      hideInTable: true,
+      search: {
+        transform: (value) => {
+          return {
+            startTime: value[0],
+            endTime: value[1],
+          };
+        },
+      },
     },
     {
       title: '操作',
       key: 'option',
       dataIndex: 'option',
-      hideInSearch:true,
-      render: (_, item) => <Space size="middle">
-        <a onClick={() => {
-          setShowEditModal(true);
-          setCurrentItem(item);
-        }} key="edit">编辑</a>
-        <a key="enabled">{item.enabled ? '禁用' : '启用'}</a>
-        <Dropdown key="more" trigger={['click']} overlay={
-          <Menu>
-            <Menu.Item key={0}>修改密码</Menu.Item>
-            <Menu.Item key={1}>所属门店</Menu.Item>
-            <Menu.Item key={2}>删除账号</Menu.Item>
-          </Menu>
-        }><a>更多<RightOutlined/></a></Dropdown>
-      </Space>
-
+      hideInSearch: true,
+      render: (_, item) => (
+        <Space size="middle">
+          <a
+            onClick={() => {
+              setShowEditModal(true);
+              setCurrentItem(item);
+            }}
+            key="edit"
+          >
+            编辑
+          </a>
+          <a key="enabled">{item.enabled ? '禁用' : '启用'}</a>
+          <Dropdown
+            key="more"
+            trigger={['click']}
+            overlay={
+              <Menu>
+                <Menu.Item key={0}>修改密码</Menu.Item>
+                <Menu.Item key={1}>所属门店</Menu.Item>
+                <Menu.Item key={2}>删除账号</Menu.Item>
+              </Menu>
+            }
+          >
+            <a>
+              更多
+              <RightOutlined />
+            </a>
+          </Dropdown>
+        </Space>
+      ),
     },
   ];
   return (
@@ -139,15 +174,17 @@ const AccountTable: React.FC = () => {
           labelWidth: 120,
         }}
         toolBarRender={() => [
-          <Button type="primary"
-                  key="primary"
-                  onClick={() => {
-                    if (!showAddModal) {
-                      setShowAddModal(true);
-                    }
-                  }}
+          <Button
+            type="primary"
+            key="primary"
+            onClick={() => {
+              if (!showEditModal) {
+                setShowEditModal(true);
+                setCurrentItem(undefined);
+              }
+            }}
           >
-            <PlusOutlined/> 添加
+            <PlusOutlined /> 添加
           </Button>,
         ]}
         request={findAccount}
@@ -180,7 +217,7 @@ const AccountTable: React.FC = () => {
       )}
       <EditForm
         onSubmit={async (value) => {
-          console.log("edit item values--->",value)
+          console.log('edit item values--->', value);
           const success = await updateAccount(value);
           if (success) {
             setShowEditModal(false);
@@ -194,7 +231,7 @@ const AccountTable: React.FC = () => {
           setShowEditModal(false);
           setCurrentItem(undefined);
         }}
-        updateModalVisible={showEditModal}
+        visible={showEditModal}
         values={currentItem || {}}
       />
     </PageContainer>

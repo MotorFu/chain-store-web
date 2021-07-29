@@ -59,7 +59,7 @@
         path: '/account/store-page',
         name: 'store-list',
         icon: 'smile',
-        component: './Welcome',
+        component: './AccountManagement/store',
       },
       {
         component: './404',

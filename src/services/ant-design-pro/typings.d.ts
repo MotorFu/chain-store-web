@@ -35,13 +35,13 @@ declare namespace API {
   };
 
   type StoreListItem = {
-    id?: number;
+    id: number;
     key?: string;
-    name?: string;
-    icon?: string;
+    name: string;
+    image?: string;
     phone?: string;
     address?: string;
-    enabled?: boolean;
+    enabled: boolean;
     createdTime?: number;
   };
 
