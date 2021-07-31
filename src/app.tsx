@@ -53,7 +53,7 @@ const authHeaderInterceptor = (url: string, options?: { [key: string]: any }) =>
   let newUrl = url;
   let header = {
     'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*',
+    // 'Access-Control-Allow-Origin': '*',
   };
   if (host !== null && host !== undefined && host !== '') {
     const hostHeader = { Host: host };
