@@ -15,4 +15,4 @@ for pid in $pids
 
 rm -rf /opt/chain_store/output.log;
 yarn install;
-nohup yarn start:pre >> /opt/chain_store/output.log 2>&1 &
+nohup yarn serve >> /opt/chain_store/output.log 2>&1 &
