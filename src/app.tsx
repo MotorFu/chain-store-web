@@ -50,14 +50,16 @@ export async function getInitialState(): Promise<{
 
 const authHeaderInterceptor = (url: string, options?: { [key: string]: any }) => {
   const host = !isDev ? 'https://store.motorfu.com' : '';
-  console.log('host----->', host);
+  let newUrl = url;
   let header = { 'Content-Type': 'application/json' };
   if (host !== null && host !== undefined && host !== '') {
     const hostHeader = { Host: host };
     header = { ...header, ...hostHeader };
+    newUrl = `${host}${url}`;
   }
+  console.log('header----->', header);
   return {
-    url: `${url}`,
+    url: `${newUrl}`,
     options: { ...options, interceptors: true, headers: header },
   };
 };
