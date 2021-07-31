@@ -6,9 +6,13 @@ import RightContent from '@/components/RightContent';
 import Footer from '@/components/Footer';
 import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
 import { BookOutlined, LinkOutlined } from '@ant-design/icons';
+import { RequestConfig } from '@@/plugin-request/request';
+import proxy from '../config/proxy';
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/login';
+
+const { REACT_APP_ENV } = process.env;
 
 /** 获取用户信息比较慢的时候会展示一个 loading */
 export const initialStateConfig = {
@@ -47,6 +51,21 @@ export async function getInitialState(): Promise<{
   };
 }
 
+const authHeaderInterceptor = (url: string, options?: { [key: string]: any }) => {
+  const host = proxy[REACT_APP_ENV || 'dev'].target;
+  let header = { 'Content-Type': 'application/json' };
+  if (host !== null && host !== undefined && host !== '') {
+    const hostHeader = { Host: host };
+    header = { ...header, ...hostHeader };
+  }
+  return {
+    url: `${url}`,
+    options: { ...options, interceptors: true, headers: header },
+  };
+};
+export const request: RequestConfig = {
+  requestInterceptors: [authHeaderInterceptor],
+};
 // ProLayout 支持的api https://procomponents.ant.design/components/layout
 export const layout: RunTimeLayoutConfig = ({ initialState }) => {
   return {

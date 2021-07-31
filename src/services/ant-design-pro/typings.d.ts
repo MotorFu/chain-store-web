@@ -67,6 +67,7 @@ declare namespace API {
     username?: string;
     icon?: string;
     phone?: string;
+    access?: string;
   };
 
   type LoginResult = {
