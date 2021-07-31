@@ -9,7 +9,7 @@ import { BookOutlined, LinkOutlined } from '@ant-design/icons';
 import { RequestConfig } from '@@/plugin-request/request';
 
 const isDev = process.env.NODE_ENV === 'development';
-const loginPath = '/login';
+const loginPath = '/system/login';
 
 /** 获取用户信息比较慢的时候会展示一个 loading */
 export const initialStateConfig = {

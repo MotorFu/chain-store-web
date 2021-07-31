@@ -1,9 +1,22 @@
 ﻿export default [
   {
+    path: '/system',
     layout: false,
-    name: 'login',
-    path: '/login',
-    component: './user/Login',
+    routes: [
+      {
+        path: '/system',
+        routes: [
+          {
+            name: 'login',
+            path: '/system/login',
+            component: './user/Login',
+          },
+        ],
+      },
+      {
+        component: './404',
+      },
+    ],
   },
   {
     path: '/welcome',
