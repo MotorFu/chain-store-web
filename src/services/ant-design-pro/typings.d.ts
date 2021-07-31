@@ -75,6 +75,41 @@ declare namespace API {
     currentAuthority?: string;
   };
 
+  type ProductList = {
+    data?: ProductListItem[];
+    /** 列表的内容总数 */
+    total?: number;
+    success?: boolean;
+  };
+
+  type ProductListItem = {
+    id: number;
+    key?: string;
+    name: string;
+    image?: string;
+    description?: string;
+    unit?: string;
+    originalPrice: number;
+    retailPrice: number;
+    enabled: boolean;
+    createdTime?: number;
+  };
+
+  type CategoryList = {
+    data?: CategoryListItem[];
+    /** 列表的内容总数 */
+    total?: number;
+    success?: boolean;
+  };
+
+  type CategoryListItem = {
+    id: number;
+    key?: string;
+    name: string;
+    enabled: boolean;
+    createdTime?: number;
+  };
+
   type RuleListItem = {
     key?: number;
     disabled?: boolean;

@@ -80,7 +80,7 @@ function findPage(req: Request, res: Response, u: string) {
     });
   }
 
-  console.log('params----->', params, typeof params.enabled);
+  console.log('params----->', params);
   if (params.id) {
     tempDataSource = tempDataSource.filter((data) => data?.id == parseInt(params.id + '', 10));
   }

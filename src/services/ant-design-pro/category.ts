@@ -1,6 +1,6 @@
 import { request } from 'umi';
 
-export async function findProduct(
+export async function findCategory(
   params: {
     // query
     /** 当前的页码 */
@@ -12,7 +12,7 @@ export async function findProduct(
   filter?: any,
   options?: { [key: string]: any },
 ) {
-  return request<API.ProductList>('/api/product', {
+  return request<API.CategoryList>('/api/category', {
     method: 'GET',
     params: {
       ...params,
@@ -23,17 +23,17 @@ export async function findProduct(
   });
 }
 
-export async function updateProduct(options?: { [key: string]: any }) {
+export async function updateCategory(options?: { [key: string]: any }) {
   console.log('options', options);
-  return request<API.ProductListItem>('/api/product', {
+  return request<API.CategoryListItem>('/api/category', {
     method: 'PUT',
     ...(options || {}),
   });
 }
 
-export async function addProduct(body: API.ProductListItem, options?: { [key: string]: any }) {
+export async function addCategory(body: API.CategoryListItem, options?: { [key: string]: any }) {
   console.log('options', options);
-  return request<API.ProductListItem>('/api/product', {
+  return request<API.CategoryListItem>('/api/category', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -43,8 +43,8 @@ export async function addProduct(body: API.ProductListItem, options?: { [key: st
   });
 }
 
-export async function removeProduct(options?: { [key: string]: any }) {
-  return request<Record<string, any>>('/api/product', {
+export async function removeCategory(options?: { [key: string]: any }) {
+  return request<Record<string, any>>('/api/category', {
     method: 'DELETE',
     ...(options || {}),
   });

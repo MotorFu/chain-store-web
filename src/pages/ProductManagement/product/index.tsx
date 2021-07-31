@@ -4,18 +4,23 @@ import ProTable, { ActionType, ProColumns } from '@ant-design/pro-table';
 import { Button, Dropdown, Menu, Space, Tag } from 'antd';
 import { PlusOutlined, RightOutlined } from '@ant-design/icons';
 
-import { findStore, addStore, removeStore, updateStore } from '@/services/ant-design-pro/store';
+import {
+  findProduct,
+  addProduct,
+  removeProduct,
+  updateProduct,
+} from '@/services/ant-design-pro/product';
 import EditForm from './components/EditForm';
 
 const AccountTable: React.FC = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const actionRef = useRef<ActionType>();
 
-  const [selectedRowsState, setSelectedRows] = useState<API.StoreListItem[]>([]);
+  const [selectedRowsState, setSelectedRows] = useState<API.ProductListItem[]>([]);
 
-  const [currentItem, setCurrentItem] = useState<API.StoreListItem>();
+  const [currentItem, setCurrentItem] = useState<API.ProductListItem>();
 
-  const columns: ProColumns<API.StoreListItem>[] = [
+  const columns: ProColumns<API.ProductListItem>[] = [
     {
       title: '门店ID',
       key: 'id',
@@ -35,14 +40,14 @@ const AccountTable: React.FC = () => {
       dataIndex: 'name',
     },
     {
-      title: '联系电话',
-      key: 'phone',
-      dataIndex: 'phone',
+      title: '描述',
+      key: 'description',
+      dataIndex: 'description',
     },
     {
-      title: '地址',
-      key: 'address',
-      dataIndex: 'address',
+      title: '计量单位',
+      key: 'unit',
+      dataIndex: 'unit',
     },
     {
       title: '状态',
@@ -120,7 +125,7 @@ const AccountTable: React.FC = () => {
   ];
   return (
     <PageContainer>
-      <ProTable<API.StoreListItem, API.PageParams>
+      <ProTable<API.ProductListItem, API.PageParams>
         headerTitle={'headerTitle'}
         actionRef={actionRef}
         rowKey="key"
@@ -141,7 +146,7 @@ const AccountTable: React.FC = () => {
             <PlusOutlined /> 添加
           </Button>,
         ]}
-        request={findStore}
+        request={findProduct}
         columns={columns}
         rowSelection={{
           onChange: (_, selectedRows) => {
@@ -160,7 +165,7 @@ const AccountTable: React.FC = () => {
           <Button
             onClick={async () => {
               console.log('selectedRowsState--->', selectedRowsState);
-              await removeStore(selectedRowsState);
+              await removeProduct(selectedRowsState);
               setSelectedRows([]);
               actionRef.current?.reloadAndRest?.();
             }}
@@ -173,9 +178,9 @@ const AccountTable: React.FC = () => {
         onSubmit={async (value) => {
           let success;
           if (value.id != null) {
-            success = await updateStore(value);
+            success = await updateProduct(value);
           } else {
-            success = await addStore(value);
+            success = await addProduct(value);
           }
 
           if (success) {

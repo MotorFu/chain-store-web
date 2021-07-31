@@ -23,7 +23,7 @@ export default {
   },
   pre: {
     '/api/': {
-      target: 'your pre url',
+      target: 'https://store.motorfu.com',
       changeOrigin: true,
       pathRewrite: { '^': '' },
     },

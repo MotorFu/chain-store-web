@@ -11,29 +11,11 @@
     icon: 'smile',
     component: './Welcome',
   },
-  {
-    path: '/admin',
-    name: 'admin',
-    icon: 'crown',
-    access: 'canAdmin',
-    component: './Admin',
-    routes: [
-      {
-        path: '/admin/sub-page',
-        name: 'sub-page',
-        icon: 'smile',
-        component: './Welcome',
-      },
-      {
-        component: './404',
-      },
-    ],
-  },
 
   {
     path: '/account',
     name: 'account',
-    icon: 'crown',
+    icon: 'user',
     access: 'canAdmin',
     routes: [
       {
@@ -64,13 +46,13 @@
         path: '/product/page',
         name: 'list',
         icon: 'smile',
-        component: './Welcome',
+        component: './ProductManagement/product',
       },
       {
         path: '/product/category-page',
         name: 'category-list',
         icon: 'smile',
-        component: './Welcome',
+        component: './ProductManagement/category',
       },
       {
         component: './404',
@@ -80,7 +62,7 @@
   {
     path: '/order',
     name: 'order',
-    icon: 'crown',
+    icon: 'moneyCollect',
     access: 'canAdmin',
     routes: [
       {
@@ -104,7 +86,7 @@
   {
     path: '/stock',
     name: 'stock',
-    icon: 'crown',
+    icon: 'gold',
     access: 'canAdmin',
     component: './Admin',
     routes: [
@@ -140,7 +122,7 @@
   {
     path: '/stat',
     name: 'stat',
-    icon: 'crown',
+    icon: 'dashboard',
     access: 'canAdmin',
     component: './Admin',
     routes: [
@@ -166,12 +148,6 @@
         component: './404',
       },
     ],
-  },
-  {
-    name: 'list.table-list',
-    icon: 'table',
-    path: '/list',
-    component: './TableList',
   },
   {
     path: '/',
