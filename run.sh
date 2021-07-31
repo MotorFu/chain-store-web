@@ -2,7 +2,7 @@
 
 git pull;
 
-pids=`lsof -i:8000 | awk '{print $2;}'`
+pids=`lsof -i:8001 | awk '{print $2;}'`
 
 
 for pid in $pids
