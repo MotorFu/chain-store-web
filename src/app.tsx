@@ -51,7 +51,10 @@ export async function getInitialState(): Promise<{
 const authHeaderInterceptor = (url: string, options?: { [key: string]: any }) => {
   const host = !isDev ? 'https://store.motorfu.com' : '';
   let newUrl = url;
-  let header = { 'Content-Type': 'application/json' };
+  let header = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+  };
   if (host !== null && host !== undefined && host !== '') {
     const hostHeader = { Host: host };
     header = { ...header, ...hostHeader };
