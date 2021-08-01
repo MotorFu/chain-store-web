@@ -14,9 +14,9 @@ export default {
   'menu.product.list': '商品列表',
   'menu.product.category-list': '分类列表',
 
-  'menu.order': '订单管理',
-  'menu.order.list': '订单列表',
-  'menu.order.transaction-list': '交易列表',
+  'menu.sale': '销售订单管理',
+  'menu.sale.list': '销售订单列表',
+  'menu.sale.transaction-list': '销售订单交易列表',
 
   'menu.stock': '库存管理',
   'menu.stock.product-list': '商品库存列表',

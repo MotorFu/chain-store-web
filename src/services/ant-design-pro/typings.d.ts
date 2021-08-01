@@ -111,6 +111,85 @@ declare namespace API {
     createdTime?: number;
   };
 
+  type SaleOrderList = {
+    data?: SaleOrderListItem[];
+    /** 列表的内容总数 */
+    total?: number;
+    success?: boolean;
+  };
+
+  type SaleOrderListItem = {
+    id: number;
+    key?: string;
+    orderNo: string;
+    totalPrice: number;
+    storeId: number;
+    storeName: string;
+    accountId: number;
+    accountName: string;
+    createdTime?: number;
+    payTime?: number;
+    payType?: number;
+    SaleOrderItem?: [];
+  };
+
+  type SaleOrderTransactionList = {
+    data?: SaleOrderTransactionListItem[];
+    /** 列表的内容总数 */
+    total?: number;
+    success?: boolean;
+  };
+
+  type SaleOrderTransactionListItem = {
+    id: number;
+    key?: string;
+    storeOrderId: number;
+    storeOrderNo: string;
+    transactionNo: string;
+    storeId: number;
+    storeName: string;
+    accountId: number;
+    accountName: string;
+    payType: number;
+    payAmount: number;
+    payTime: number;
+
+    createdTime?: number;
+  };
+
+  //订单明细
+  type SaleOrderItem = {
+    id: number;
+    key?: string;
+    storeProductId?: number;
+    storeProductSkuId?: number;
+    storeProductName?: string;
+    storeProductSkuInfo?: string;
+    price?: number;
+    count?: number;
+  };
+
+  //门店商品库存
+  type StoreProductStockList = {
+    data?: StoreProductStockListItem[];
+    /** 列表的内容总数 */
+    total?: number;
+    success?: boolean;
+  };
+
+  type StoreProductStockListItem = {
+    id: number;
+    key?: string;
+    storeId: number;
+    storeName: string;
+    productId: number;
+    storeProductId: number;
+    storeProductSkuInfo: string;
+    price: number;
+    stock: number;
+    createdTime?: number;
+  };
+
   type RuleListItem = {
     key?: number;
     disabled?: boolean;

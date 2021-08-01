@@ -14,9 +14,9 @@ export default {
   'menu.product.list': 'Product List',
   'menu.product.category-list': 'Category List',
 
-  'menu.order': 'Order Management',
-  'menu.order.list': 'Order List',
-  'menu.order.transaction-list': 'Transaction List',
+  'menu.sale': 'Sale Order Management',
+  'menu.sale.list': 'Sale Order List',
+  'menu.sale.transaction-list': 'Sale Order Transaction List',
 
   'menu.stock': 'Stock Management',
   'menu.stock.product-list': 'Product Stock List',

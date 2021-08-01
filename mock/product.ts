@@ -154,4 +154,8 @@ export default {
   'PUT /api/product': (req: Request, res: Response) => {
     res.send({ status: 'ok', success: true });
   },
+
+  'DELETE /api/product/{id}': (req: Request, res: Response) => {
+    res.send({ status: 'ok', success: true });
+  },
 };

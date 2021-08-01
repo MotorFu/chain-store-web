@@ -73,22 +73,22 @@
     ],
   },
   {
-    path: '/order',
-    name: 'order',
+    path: '/sale',
+    name: 'sale',
     icon: 'moneyCollect',
     access: 'canAdmin',
     routes: [
       {
-        path: '/order/page',
+        path: '/sale/page',
         name: 'list',
         icon: 'smile',
-        component: './Welcome',
+        component: './OrderManagement/saleOrder',
       },
       {
-        path: '/order/transaction-page',
+        path: '/sale/transaction-page',
         name: 'transaction-list',
         icon: 'smile',
-        component: './Welcome',
+        component: './OrderManagement/transaction',
       },
       {
         component: './404',
