@@ -14,6 +14,11 @@ for pid in $pids
         done
 
 rm -rf /opt/chain_store/output.log;
-yarn install;
-yarn upgrade;
+if [ "$1" == "install" ]; then
+  yarn install;
+fi
+if [ "$1" == "upgrade" ]; then
+  yarn upgrade;
+fi
+
 nohup yarn serve >> /opt/chain_store/output.log 2>&1 &

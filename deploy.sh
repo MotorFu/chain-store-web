@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 
-yarn build
-
 server_host="motorfu"
-server_dir="/opt/chian_store"
+server_dir="/opt/chain_store/chain-store-web"
 REMOTE_DIR="${server_host}:${server_dir}/"
 
 
