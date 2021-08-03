@@ -9,9 +9,9 @@ export async function findAccount(
     current?: number;
     /** 页面的容量 */
     pageSize?: number;
-
   },
-  sorter?:any, filter?:any,
+  sorter?: any,
+  filter?: any,
   options?: { [key: string]: any },
 ) {
   return request<API.AccountListItem>('/api/account', {
@@ -19,7 +19,7 @@ export async function findAccount(
     params: {
       ...params,
       sorter,
-      filter
+      filter,
     },
     ...(options || {}),
   });

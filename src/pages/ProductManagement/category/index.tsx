@@ -9,7 +9,7 @@ import {
   addCategory,
   removeCategory,
   updateCategory,
-} from '@/services/ant-design-pro/category';
+} from '@/services/ant-design-pro/productApi/category';
 import EditForm from './components/EditForm';
 
 const AccountTable: React.FC = () => {

@@ -9,7 +9,7 @@ import {
   addProduct,
   removeProduct,
   updateProduct,
-} from '@/services/ant-design-pro/product';
+} from '@/services/ant-design-pro/productApi';
 import EditForm from './components/EditForm';
 
 const AccountTable: React.FC = () => {

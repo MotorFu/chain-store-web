@@ -3,7 +3,7 @@ import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import ProTable, { ActionType, ProColumns } from '@ant-design/pro-table';
 import { Button, Drawer, Space } from 'antd';
 
-import { findSaleOrder, removeSaleOrder } from '@/services/ant-design-pro/saleOrder';
+import { findSaleOrder, removeSaleOrder } from '@/services/ant-design-pro/saleOrderApi';
 import ProDescriptions, { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
 
 const SaleOrderTable: React.FC = () => {

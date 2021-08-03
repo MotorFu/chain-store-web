@@ -42,7 +42,7 @@ export async function findSaleOrderTransactionLog(
   filter?: any,
   options?: { [key: string]: any },
 ) {
-  return request<API.SaleOrderTransactionLogList>('/api/saleOrder/transactionLog', {
+  return request<API.SaleOrderTransactionList>('/api/saleOrder/transactionLog', {
     method: 'GET',
     params: {
       ...params,

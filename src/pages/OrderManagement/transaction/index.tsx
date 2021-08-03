@@ -3,7 +3,7 @@ import { PageContainer } from '@ant-design/pro-layout';
 import ProTable, { ActionType, ProColumns } from '@ant-design/pro-table';
 import { Drawer, Space } from 'antd';
 
-import { findSaleOrderTransaction } from '@/services/ant-design-pro/saleOrderTransaction';
+import { findSaleOrderTransaction } from '@/services/ant-design-pro/saleOrderApi/saleOrderTransaction';
 import ProDescriptions, { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
 
 const SaleOrderTable: React.FC = () => {

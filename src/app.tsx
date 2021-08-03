@@ -60,7 +60,6 @@ const authHeaderInterceptor = (url: string, options?: { [key: string]: any }) =>
     header = { ...header, ...hostHeader };
     newUrl = `${host}${url}`;
   }
-  console.log('header----->', header);
   return {
     url: `${newUrl}`,
     options: { ...options, interceptors: true, headers: header },
