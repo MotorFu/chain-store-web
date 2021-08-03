@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import dayjs from 'dayjs';
 import { parse } from 'url';
 import { parseInt } from 'lodash';
@@ -40,8 +40,8 @@ const genList = (current: number, pageSize: number) => {
         'https://gw.alipayobjects.com/zos/rmsportal/eeHMaZBwmTvLdIwMfBpg.png',
         'https://gw.alipayobjects.com/zos/rmsportal/udxAbMEhpwthVVcjLXik.png',
       ][i % 2],
-      phone: 18888000000 + i + '',
-      enabled: i % 4 != 0,
+      phone: `${18888000000 + i}`,
+      enabled: i % 4 !== 0,
       type: 3,
       createdTime: dayjs()
         .add(-(pageSize - i), 'day')
@@ -51,7 +51,7 @@ const genList = (current: number, pageSize: number) => {
   tableListDataSource.reverse();
   return tableListDataSource;
 };
-//源数据
+// 源数据
 const tableListDataSource = genList(1, 20);
 
 /**
@@ -105,7 +105,7 @@ function findPage(req: Request, res: Response, u: string) {
 
   console.log('params----->', params, typeof params.enabled);
   if (params.id) {
-    tempDataSource = tempDataSource.filter((data) => data?.id == parseInt(params.id + '', 10));
+    tempDataSource = tempDataSource.filter((data) => data?.id === parseInt(`${params.id}`, 10));
   }
   if (params.username) {
     tempDataSource = tempDataSource.filter((data) =>
@@ -121,7 +121,7 @@ function findPage(req: Request, res: Response, u: string) {
     );
   }
   if (params.type && (params.type as number) !== 0) {
-    tempDataSource = tempDataSource.filter((data) => data?.type == params.type);
+    tempDataSource = tempDataSource.filter((data) => data?.type === params.type);
   }
   if (params.startTime && params.endTime) {
     const startTime = dayjs(params.startTime).valueOf();
@@ -131,7 +131,7 @@ function findPage(req: Request, res: Response, u: string) {
     );
   }
 
-  let dataSource = [...tempDataSource].slice(
+  const dataSource = [...tempDataSource].slice(
     ((current as number) - 1) * (pageSize as number),
     (current as number) * (pageSize as number),
   );

@@ -1,12 +1,13 @@
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import dayjs from 'dayjs';
 import { parse } from 'url';
 import { parseInt } from 'lodash';
-
+// import { PayTypes } from '@/services/SysConst';
+export const PayTypes: number[] = [1, 2, 3];
 // mock tableListDataSource
 const genList = (current: number, pageSize: number) => {
-  console.log('store init data');
-  const tableListDataSource: API.StoreListItem[] = [];
+  console.log('saleOrder init data');
+  const tableListDataSource: API.SaleOrderListItem[] = [];
 
   for (let i = 0; i < pageSize; i += 1) {
     const index: number = (current - 1) * 10 + i;
@@ -14,14 +15,19 @@ const genList = (current: number, pageSize: number) => {
     tableListDataSource.push({
       id: index + 1,
       key: `${index + 1}`,
-      name: `店名_ ${index}`,
-      image: [
-        'https://gw.alipayobjects.com/zos/rmsportal/eeHMaZBwmTvLdIwMfBpg.png',
-        'https://gw.alipayobjects.com/zos/rmsportal/udxAbMEhpwthVVcjLXik.png',
-      ][i % 2],
-      phone: 16688000000 + i + '',
-      address: '上海市徐汇区',
-      enabled: i % 4 != 0,
+      storeId: index + 1,
+      storeName: `店名_${index + 1}`,
+      orderNo: dayjs()
+        .add(-(pageSize - i), 'day')
+        .format('YYYYMMDDHHmmss'),
+      totalPrice: 10,
+      accountId: 1,
+      accountName: `收银员_${(index % 3) + 1}`,
+      payType: PayTypes[Math.ceil(Math.random() * 2) + 1],
+      payTime: dayjs()
+        .add(-(pageSize - i), 'day')
+        .add(50, 'second')
+        .valueOf(),
       createdTime: dayjs()
         .add(-(pageSize - i), 'day')
         .valueOf(),
@@ -30,14 +36,15 @@ const genList = (current: number, pageSize: number) => {
   tableListDataSource.reverse();
   return tableListDataSource;
 };
-//源数据
-const tableListDataSource = genList(1, 15);
+
+// 源数据
+const tableListDataSource = genList(1, 100);
 
 /**
  * 拷贝数据
  */
 function cloneDataSource() {
-  const data: API.StoreListItem[] = [];
+  const data: API.SaleOrderListItem[] = [];
   tableListDataSource.forEach((item) => {
     data.push(item);
   });
@@ -52,7 +59,7 @@ function findPage(req: Request, res: Response, u: string) {
   }
   const { current = 1, pageSize = 10 } = req.query;
   const params = parse(realUrl, true).query as unknown as API.PageParams &
-    API.StoreListItem & {
+    API.SaleOrderListItem & {
       sorter: any;
       filter: any;
     };
@@ -82,24 +89,18 @@ function findPage(req: Request, res: Response, u: string) {
 
   console.log('params----->', params);
   if (params.id) {
-    tempDataSource = tempDataSource.filter((data) => data?.id == parseInt(params.id + '', 10));
+    tempDataSource = tempDataSource.filter((data) => data?.id === parseInt(`${params.id}`, 10));
   }
-  if (params.name) {
-    tempDataSource = tempDataSource.filter((data) => data?.name?.includes(params.name || ''));
+  if (params.orderNo) {
+    tempDataSource = tempDataSource.filter((data) => data?.orderNo?.includes(params.orderNo || ''));
   }
-  if (params.phone) {
-    tempDataSource = tempDataSource.filter((data) => data?.phone?.includes(params.phone || ''));
-  }
-  if (params.address) {
-    tempDataSource = tempDataSource.filter((data) => data?.address?.includes(params.address || ''));
-  }
-  if (params.enabled && (String(params.enabled) === 'true' || String(params.enabled) === 'false')) {
-    tempDataSource = tempDataSource.filter(
-      (data) => (data?.enabled ? 'true' : 'false') === String(params.enabled),
+  if (params.storeName) {
+    tempDataSource = tempDataSource.filter((data) =>
+      data?.storeName?.includes(params.storeName || ''),
     );
   }
 
-  let dataSource = [...tempDataSource].slice(
+  const dataSource = [...tempDataSource].slice(
     ((current as number) - 1) * (pageSize as number),
     (current as number) * (pageSize as number),
   );
@@ -116,29 +117,9 @@ function findPage(req: Request, res: Response, u: string) {
 
 export default {
   // GET POST 可省略
-  'GET /api/store': findPage,
+  'GET /api/saleOrder': findPage,
 
-  //添加门店
-  'POST /api/store': (req: Request, res: Response) => {
-    const { image, name, phone, address } = req.body;
-    const itemIdList: number[] = [];
-    tableListDataSource.forEach((item) => {
-      itemIdList.push(item.id);
-    });
-    const item = {
-      id: Math.max(...itemIdList) + 1,
-      image: image[0].thumbUrl,
-      name,
-      phone,
-      address,
-      enabled: true,
-      createdTime: dayjs().valueOf(),
-    };
-    tableListDataSource.push(item);
-    res.send({ status: 'ok', success: true });
-  },
-
-  'PUT /api/store': (req: Request, res: Response) => {
+  'DELETE /api/saleOrder/{id}': (req: Request, res: Response) => {
     res.send({ status: 'ok', success: true });
   },
 };

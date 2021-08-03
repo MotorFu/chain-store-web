@@ -4,7 +4,7 @@ import ProTable, { ActionType, ProColumns } from '@ant-design/pro-table';
 import { Button, Dropdown, Menu, Space, Tag } from 'antd';
 import { PlusOutlined, RightOutlined } from '@ant-design/icons';
 
-import { findAccount, updateAccount } from '@/services/ant-design-pro/accountApi';
+import { findAccount, updateAccount } from '@/services/ant-design-pro/AccountApi';
 import EditForm from './components/EditForm';
 
 const AccountTable: React.FC = () => {

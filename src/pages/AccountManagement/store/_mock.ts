@@ -1,13 +1,12 @@
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import dayjs from 'dayjs';
 import { parse } from 'url';
 import { parseInt } from 'lodash';
-import { SysConst } from '@/services/const';
 
 // mock tableListDataSource
 const genList = (current: number, pageSize: number) => {
-  console.log('saleOrder init data');
-  const tableListDataSource: API.SaleOrderTransactionListItem[] = [];
+  console.log('store init data');
+  const tableListDataSource: API.StoreListItem[] = [];
 
   for (let i = 0; i < pageSize; i += 1) {
     const index: number = (current - 1) * 10 + i;
@@ -15,23 +14,14 @@ const genList = (current: number, pageSize: number) => {
     tableListDataSource.push({
       id: index + 1,
       key: `${index + 1}`,
-      storeId: index + 1,
-      storeName: `店名_${index + 1}`,
-      storeOrderId: index + 1,
-      storeOrderNo: dayjs()
-        .add(-(pageSize - i), 'day')
-        .format('YYYYMMDDHHmmss'),
-      transactionNo: dayjs()
-        .add(-(pageSize - i), 'day')
-        .format('YYYYMMDDHHmmss'),
-      accountId: 1,
-      accountName: `收银员_${(index % 3) + 1}`,
-      payType: SysConst.PayTypes[Math.ceil(Math.random() * 2) + 1],
-      payAmount: 10,
-      payTime: dayjs()
-        .add(-(pageSize - i), 'day')
-        .add(10, 'second')
-        .valueOf(),
+      name: `店名_ ${index}`,
+      image: [
+        'https://gw.alipayobjects.com/zos/rmsportal/eeHMaZBwmTvLdIwMfBpg.png',
+        'https://gw.alipayobjects.com/zos/rmsportal/udxAbMEhpwthVVcjLXik.png',
+      ][i % 2],
+      phone: `${16688000000 + i}`,
+      address: '上海市徐汇区',
+      enabled: i % 4 !== 0,
       createdTime: dayjs()
         .add(-(pageSize - i), 'day')
         .valueOf(),
@@ -40,14 +30,14 @@ const genList = (current: number, pageSize: number) => {
   tableListDataSource.reverse();
   return tableListDataSource;
 };
-//源数据
-const tableListDataSource = genList(1, 100);
+// 源数据
+const tableListDataSource = genList(1, 15);
 
 /**
  * 拷贝数据
  */
 function cloneDataSource() {
-  const data: API.SaleOrderTransactionListItem[] = [];
+  const data: API.StoreListItem[] = [];
   tableListDataSource.forEach((item) => {
     data.push(item);
   });
@@ -62,7 +52,7 @@ function findPage(req: Request, res: Response, u: string) {
   }
   const { current = 1, pageSize = 10 } = req.query;
   const params = parse(realUrl, true).query as unknown as API.PageParams &
-    API.SaleOrderTransactionListItem & {
+    API.StoreListItem & {
       sorter: any;
       filter: any;
     };
@@ -92,25 +82,24 @@ function findPage(req: Request, res: Response, u: string) {
 
   console.log('params----->', params);
   if (params.id) {
-    tempDataSource = tempDataSource.filter((data) => data?.id == parseInt(params.id + '', 10));
+    tempDataSource = tempDataSource.filter((data) => data?.id === parseInt(`${params.id}`, 10));
   }
-  if (params.transactionNo) {
-    tempDataSource = tempDataSource.filter((data) =>
-      data?.transactionNo?.includes(params.transactionNo || ''),
-    );
+  if (params.name) {
+    tempDataSource = tempDataSource.filter((data) => data?.name?.includes(params.name || ''));
   }
-  if (params.storeOrderNo) {
-    tempDataSource = tempDataSource.filter((data) =>
-      data?.storeOrderNo?.includes(params.storeOrderNo || ''),
-    );
+  if (params.phone) {
+    tempDataSource = tempDataSource.filter((data) => data?.phone?.includes(params.phone || ''));
   }
-  if (params.storeName) {
-    tempDataSource = tempDataSource.filter((data) =>
-      data?.storeName?.includes(params.storeName || ''),
+  if (params.address) {
+    tempDataSource = tempDataSource.filter((data) => data?.address?.includes(params.address || ''));
+  }
+  if (params.enabled && (String(params.enabled) === 'true' || String(params.enabled) === 'false')) {
+    tempDataSource = tempDataSource.filter(
+      (data) => (data?.enabled ? 'true' : 'false') === String(params.enabled),
     );
   }
 
-  let dataSource = [...tempDataSource].slice(
+  const dataSource = [...tempDataSource].slice(
     ((current as number) - 1) * (pageSize as number),
     (current as number) * (pageSize as number),
   );
@@ -127,5 +116,29 @@ function findPage(req: Request, res: Response, u: string) {
 
 export default {
   // GET POST 可省略
-  'GET /api/saleOrder/transaction': findPage,
+  'GET /api/store': findPage,
+
+  // 添加门店
+  'POST /api/store': (req: Request, res: Response) => {
+    const { image, name, phone, address } = req.body;
+    const itemIdList: number[] = [];
+    tableListDataSource.forEach((item) => {
+      itemIdList.push(item.id);
+    });
+    const item = {
+      id: Math.max(...itemIdList) + 1,
+      image: image[0].thumbUrl,
+      name,
+      phone,
+      address,
+      enabled: true,
+      createdTime: dayjs().valueOf(),
+    };
+    tableListDataSource.push(item);
+    res.send({ status: 'ok', success: true });
+  },
+
+  'PUT /api/store': (req: Request, res: Response) => {
+    res.send({ status: 'ok', success: true });
+  },
 };

@@ -190,6 +190,156 @@ declare namespace API {
     createdTime?: number;
   };
 
+  // 门店商品采购
+  type StorePurchaseOrderList = {
+    data?: StorePurchaseOrderListItem[];
+    /** 列表的内容总数 */
+    total?: number;
+    success?: boolean;
+  };
+
+  export type PurchaseOrderStatus = 1 | 2 | 3; // 1:草稿，2：待采购，3：采购完成
+
+  type StorePurchaseOrderListItem = {
+    id: number;
+    key?: string;
+    storeId: number;
+    storeName: string;
+    orderNo: string;
+    status: PurchaseOrderStatus;
+    createdTime?: number;
+  };
+
+  type StorePurchaseOrderItemList = {
+    data?: StorePurchaseOrderItemListItem[];
+    /** 列表的内容总数 */
+    total?: number;
+    success?: boolean;
+  };
+
+  type StorePurchaseOrderItemListItem = {
+    id: number;
+    key?: string;
+    storeId: number;
+    storeName: string;
+    productId: number;
+    storeProductId: number;
+    storeProductSkuInfo: string;
+    planStock: number;
+    actualStock: number;
+    costPrice: number;
+  };
+
+  // 门店商品入库
+  type StoreStockInOrderList = {
+    data?: StoreStockInOrderListItem[];
+    /** 列表的内容总数 */
+    total?: number;
+    success?: boolean;
+  };
+
+  export type StockInOrderStatus = 1 | 2 | 3; // 1:草稿，2：待入库，3：已入库
+  export type StockInOrderSource = 1 | 2; // 1：手动入库，2：采购入库
+
+  type StoreStockInOrderListItem = {
+    id: number;
+    key?: string;
+    storeId: number;
+    storeName: string;
+    orderNo: string;
+    source: StockInOrderSource;
+    source_order_id: number; //1:草稿，2：待入库，3：已入库
+    status: StockInOrderStatus;
+    createdTime?: number;
+  };
+
+  type StoreStockInOrderItemList = {
+    data?: StoreStockInOrderItemListItem[];
+    /** 列表的内容总数 */
+    total?: number;
+    success?: boolean;
+  };
+
+  type StoreStockInOrderItemListItem = {
+    id: number;
+    key?: string;
+    storeId: number;
+    storeName: string;
+    productId: number;
+    storeProductId: number;
+    storeProductSkuInfo: string;
+    stock: number;
+    costPrice: number;
+    updatedTime: number;
+  };
+
+  // 门店商品盘点
+  type StoreTakeStockOrderList = {
+    data?: StoreTakeStockOrderListItem[];
+    /** 列表的内容总数 */
+    total?: number;
+    success?: boolean;
+  };
+
+  export type TakeStockOrderStatus = 1 | 2 | 3; // 1:草稿，2：盘点中，3：盘点完成
+
+  type StoreTakeStockOrderListItem = {
+    id: number;
+    key?: string;
+    storeId: number;
+    storeName: string;
+    orderNo: string;
+    status: TakeStockOrderStatus;
+    createdTime?: number;
+  };
+
+  type StoreTakeStockOrderItemList = {
+    data?: StoreTakeStockOrderItemListItem[];
+    /** 列表的内容总数 */
+    total?: number;
+    success?: boolean;
+  };
+
+  export type TakeStockResult = 1 | 2; // 1：报损，2：报溢
+
+  type StoreTakeStockOrderItemListItem = {
+    id: number;
+    key?: string;
+    storeId: number;
+    storeName: string;
+    productId: number;
+    storeProductId: number;
+    storeProductSkuInfo: string;
+    actualStock: number;
+    takeStock: number;
+    result: TakeStockResult;
+    result_stock: number;
+    updatedTime: number;
+  };
+
+  // 操作日志
+  type StoreStockLogList = {
+    data?: StoreStockLogItemList[];
+    /** 列表的内容总数 */
+    total?: number;
+    success?: boolean;
+  };
+
+  export type StockLogType = 1 | 2 | 3 | 4; // 1：出库，2：入库,3：报损，4：报溢
+
+  type StoreStockLogItemList = {
+    id: number;
+    key?: string;
+    storeId: number;
+    storeName: string;
+    productId: number;
+    storeProductId: number;
+    storeProductSkuInfo: string;
+    type: StockLogType;
+    stock: number;
+    createdTime: number;
+  };
+
   type RuleListItem = {
     key?: number;
     disabled?: boolean;

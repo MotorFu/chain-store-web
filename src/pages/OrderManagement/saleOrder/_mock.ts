@@ -1,9 +1,9 @@
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import dayjs from 'dayjs';
 import { parse } from 'url';
 import { parseInt } from 'lodash';
-import { SysConst } from '@/services/const';
-
+// import { PayTypes } from '@/services/SysConst';
+export const PayTypes: number[] = [1, 2, 3];
 // mock tableListDataSource
 const genList = (current: number, pageSize: number) => {
   console.log('saleOrder init data');
@@ -23,7 +23,7 @@ const genList = (current: number, pageSize: number) => {
       totalPrice: 10,
       accountId: 1,
       accountName: `收银员_${(index % 3) + 1}`,
-      payType: SysConst.PayTypes[Math.ceil(Math.random() * 2) + 1],
+      payType: PayTypes[Math.ceil(Math.random() * 2) + 1],
       payTime: dayjs()
         .add(-(pageSize - i), 'day')
         .add(50, 'second')
@@ -36,7 +36,8 @@ const genList = (current: number, pageSize: number) => {
   tableListDataSource.reverse();
   return tableListDataSource;
 };
-//源数据
+
+// 源数据
 const tableListDataSource = genList(1, 100);
 
 /**
@@ -88,7 +89,7 @@ function findPage(req: Request, res: Response, u: string) {
 
   console.log('params----->', params);
   if (params.id) {
-    tempDataSource = tempDataSource.filter((data) => data?.id == parseInt(params.id + '', 10));
+    tempDataSource = tempDataSource.filter((data) => data?.id === parseInt(`${params.id}`, 10));
   }
   if (params.orderNo) {
     tempDataSource = tempDataSource.filter((data) => data?.orderNo?.includes(params.orderNo || ''));
@@ -99,7 +100,7 @@ function findPage(req: Request, res: Response, u: string) {
     );
   }
 
-  let dataSource = [...tempDataSource].slice(
+  const dataSource = [...tempDataSource].slice(
     ((current as number) - 1) * (pageSize as number),
     (current as number) * (pageSize as number),
   );
