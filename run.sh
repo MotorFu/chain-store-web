@@ -21,4 +21,8 @@ if [ "$1" == "upgrade" ]; then
   yarn upgrade;
 fi
 
+if [ "$1" == "deploy" ]; then
+  yarn deploy;
+fi
+
 nohup yarn serve >> /opt/chain_store/output.log 2>&1 &
