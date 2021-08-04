@@ -3,18 +3,21 @@ import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import ProTable, { ActionType, ProColumns } from '@ant-design/pro-table';
 import { Button, Drawer, Space } from 'antd';
 
-import { findSaleOrder, removeSaleOrder } from '@/services/ant-design-pro/SaleOrderApi';
+import {
+  findTakeStockOrder,
+  removeTakeStockOrder,
+} from '@/services/chain-store/StockApi/TakeStockOrder';
 import ProDescriptions, { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
 
 const SaleOrderTable: React.FC = () => {
   const [showViewDrawer, setShowViewDrawer] = useState(false);
   const actionRef = useRef<ActionType>();
 
-  const [selectedRowsState, setSelectedRows] = useState<API.SaleOrderListItem[]>([]);
+  const [selectedRowsState, setSelectedRows] = useState<API.StoreTakeStockOrderListItem[]>([]);
 
-  const [currentItem, setCurrentItem] = useState<API.SaleOrderListItem>();
+  const [currentItem, setCurrentItem] = useState<API.StoreTakeStockOrderListItem>();
 
-  const columns: ProColumns<API.SaleOrderListItem>[] = [
+  const columns: ProColumns<API.StoreTakeStockOrderListItem>[] = [
     {
       title: '订单ID',
       key: 'id',
@@ -26,37 +29,21 @@ const SaleOrderTable: React.FC = () => {
       key: 'orderNo',
       dataIndex: 'orderNo',
     },
+
+    {
+      title: '盘点商品数',
+      key: 'productCount',
+      dataIndex: 'productCount',
+    },
     {
       title: '门店',
       key: 'storeName',
       dataIndex: 'storeName',
     },
     {
-      title: '总售价',
-      key: 'totalPrice',
-      dataIndex: 'totalPrice',
-    },
-
-    {
-      title: '收银名',
-      key: 'accountName',
-      dataIndex: 'accountName',
-    },
-    {
-      title: '支付类型',
-      key: 'payType',
-      dataIndex: 'payType',
-    },
-    {
-      title: '支付时间',
-      key: 'payTime',
-      dataIndex: 'payTime',
-      valueType: 'dateTime',
-    },
-    {
       title: '创建时间',
-      key: 'createdTime',
-      dataIndex: 'createdTime',
+      key: 'createdAt',
+      dataIndex: 'createdAt',
       valueType: 'dateTime',
       sorter: true,
       hideInSearch: true,
@@ -84,14 +71,14 @@ const SaleOrderTable: React.FC = () => {
   ];
   return (
     <PageContainer>
-      <ProTable<API.SaleOrderListItem, API.PageParams>
+      <ProTable<API.StoreTakeStockOrderListItem, API.PageParams>
         headerTitle={'headerTitle'}
         actionRef={actionRef}
         rowKey="key"
         search={{
           labelWidth: 120,
         }}
-        request={findSaleOrder}
+        request={findTakeStockOrder}
         columns={columns}
         rowSelection={{
           onChange: (_, selectedRows) => {
@@ -110,7 +97,7 @@ const SaleOrderTable: React.FC = () => {
           <Button
             onClick={async () => {
               console.log('selectedRowsState--->', selectedRowsState);
-              await removeSaleOrder(selectedRowsState);
+              await removeTakeStockOrder(selectedRowsState.map((it) => it.id));
               setSelectedRows([]);
               actionRef.current?.reloadAndRest?.();
             }}
@@ -130,16 +117,16 @@ const SaleOrderTable: React.FC = () => {
         closable={false}
       >
         {currentItem?.orderNo && (
-          <ProDescriptions<API.SaleOrderListItem>
+          <ProDescriptions<API.StoreTakeStockOrderListItem>
             column={2}
-            title={'订单详情'}
+            title={'盘点单详情'}
             request={async () => ({
               data: currentItem || {},
             })}
             params={{
               id: currentItem?.id,
             }}
-            columns={columns as ProDescriptionsItemProps<API.SaleOrderListItem>[]}
+            columns={columns as ProDescriptionsItemProps<API.StoreTakeStockOrderListItem>[]}
           />
         )}
       </Drawer>

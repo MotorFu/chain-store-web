@@ -5,9 +5,11 @@ import { parseInt } from 'lodash';
 // import { PayTypes } from '@/services/SysConst';
 export const PayTypes: number[] = [1, 2, 3];
 // mock tableListDataSource
+
+const status: API.TakeStockOrderStatus[] = [1, 2, 3];
 const genList = (current: number, pageSize: number) => {
   console.log('saleOrder init data');
-  const tableListDataSource: API.SaleOrderListItem[] = [];
+  const tableListDataSource: API.StoreTakeStockOrderListItem[] = [];
 
   for (let i = 0; i < pageSize; i += 1) {
     const index: number = (current - 1) * 10 + i;
@@ -20,15 +22,9 @@ const genList = (current: number, pageSize: number) => {
       orderNo: dayjs()
         .add(-(pageSize - i), 'day')
         .format('YYYYMMDDHHmmss'),
-      totalPrice: 10,
-      accountId: 1,
-      accountName: `收银员_${(index % 3) + 1}`,
-      payType: PayTypes[Math.ceil(Math.random() * 2) + 1],
-      payTime: dayjs()
-        .add(-(pageSize - i), 'day')
-        .add(50, 'second')
-        .valueOf(),
-      createdTime: dayjs()
+      productCount: Math.ceil(Math.random() * 50) + 1,
+      status: status[Math.ceil(Math.random() * 2) + 1],
+      createdAt: dayjs()
         .add(-(pageSize - i), 'day')
         .valueOf(),
     });
@@ -44,7 +40,7 @@ const tableListDataSource = genList(1, 100);
  * 拷贝数据
  */
 function cloneDataSource() {
-  const data: API.SaleOrderListItem[] = [];
+  const data: API.StoreTakeStockOrderListItem[] = [];
   tableListDataSource.forEach((item) => {
     data.push(item);
   });
@@ -117,9 +113,9 @@ function findPage(req: Request, res: Response, u: string) {
 
 export default {
   // GET POST 可省略
-  'GET /api/saleOrder': findPage,
+  'GET /api/store/takeStock/order': findPage,
 
-  'DELETE /api/saleOrder/{id}': (req: Request, res: Response) => {
+  'DELETE /api/store/takeStock/order': (req: Request, res: Response) => {
     res.send({ status: 'ok', success: true });
   },
 };

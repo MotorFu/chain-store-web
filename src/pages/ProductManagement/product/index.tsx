@@ -9,7 +9,7 @@ import {
   addProduct,
   removeProduct,
   updateProduct,
-} from '@/services/ant-design-pro/ProductApi';
+} from '@/services/chain-store/ProductApi';
 import EditForm from './components/EditForm';
 
 const AccountTable: React.FC = () => {
@@ -80,8 +80,8 @@ const AccountTable: React.FC = () => {
     },
     {
       title: '创建时间',
-      key: 'createdTime',
-      dataIndex: 'createdTime',
+      key: 'createdAt',
+      dataIndex: 'createdAt',
       valueType: 'dateTime',
       sorter: true,
       hideInSearch: true,

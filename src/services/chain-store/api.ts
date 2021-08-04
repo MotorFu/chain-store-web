@@ -58,7 +58,7 @@ export async function rule(
     params: {
       ...params,
       sorter,
-      filter
+      filter,
     },
     ...(options || {}),
   });

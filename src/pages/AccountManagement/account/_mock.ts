@@ -16,7 +16,7 @@ const genList = (current: number, pageSize: number) => {
     phone: '18616352386',
     enabled: true,
     type: 1,
-    createdTime: dayjs().valueOf(),
+    createdAt: dayjs().valueOf(),
   });
 
   tableListDataSource.push({
@@ -27,7 +27,7 @@ const genList = (current: number, pageSize: number) => {
     phone: '18616352386',
     enabled: true,
     type: 2,
-    createdTime: dayjs().valueOf(),
+    createdAt: dayjs().valueOf(),
   });
   for (let i = 0; i < pageSize; i += 1) {
     const index: number = (current - 1) * 10 + i;
@@ -43,7 +43,7 @@ const genList = (current: number, pageSize: number) => {
       phone: `${18888000000 + i}`,
       enabled: i % 4 !== 0,
       type: 3,
-      createdTime: dayjs()
+      createdAt: dayjs()
         .add(-(pageSize - i), 'day')
         .valueOf(),
     });
@@ -127,7 +127,7 @@ function findPage(req: Request, res: Response, u: string) {
     const startTime = dayjs(params.startTime).valueOf();
     const endTime = dayjs(params.endTime).valueOf() + 24 * 3600 * 1000;
     tempDataSource = tempDataSource.filter(
-      (data) => data.createdTime >= startTime && data.createdTime < endTime,
+      (data) => data.createdAt >= startTime && data.createdAt < endTime,
     );
   }
 

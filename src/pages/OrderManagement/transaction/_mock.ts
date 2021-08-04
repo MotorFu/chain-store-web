@@ -34,7 +34,7 @@ const genList = (current: number, pageSize: number) => {
         .add(-(pageSize - i), 'day')
         .add(10, 'second')
         .valueOf(),
-      createdTime: dayjs()
+      createdAt: dayjs()
         .add(-(pageSize - i), 'day')
         .valueOf(),
     });

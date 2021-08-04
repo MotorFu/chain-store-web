@@ -22,7 +22,7 @@ const genList = (current: number, pageSize: number) => {
       phone: `${16688000000 + i}`,
       address: '上海市徐汇区',
       enabled: i % 4 !== 0,
-      createdTime: dayjs()
+      createdAt: dayjs()
         .add(-(pageSize - i), 'day')
         .valueOf(),
     });
@@ -132,7 +132,7 @@ export default {
       phone,
       address,
       enabled: true,
-      createdTime: dayjs().valueOf(),
+      createdAt: dayjs().valueOf(),
     };
     tableListDataSource.push(item);
     res.send({ status: 'ok', success: true });

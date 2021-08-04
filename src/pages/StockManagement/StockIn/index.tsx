@@ -3,10 +3,7 @@ import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import ProTable, { ActionType, ProColumns } from '@ant-design/pro-table';
 import { Button, Drawer, Space } from 'antd';
 
-import {
-  findStockInOrder,
-  removeStockInOrder,
-} from '@/services/ant-design-pro/StockApi/StockInOrder';
+import { findStockInOrder, removeStockInOrder } from '@/services/chain-store/StockApi/StockInOrder';
 import ProDescriptions, { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
 
 const SaleOrderTable: React.FC = () => {
@@ -42,8 +39,8 @@ const SaleOrderTable: React.FC = () => {
 
     {
       title: '来源ID',
-      key: 'source',
-      dataIndex: 'source',
+      key: 'sourceOrderId',
+      dataIndex: 'sourceOrderId',
     },
 
     {
@@ -54,8 +51,8 @@ const SaleOrderTable: React.FC = () => {
 
     {
       title: '创建时间',
-      key: 'createdTime',
-      dataIndex: 'createdTime',
+      key: 'createdAt',
+      dataIndex: 'createdAt',
       valueType: 'dateTime',
       sorter: true,
       hideInSearch: true,
@@ -129,16 +126,16 @@ const SaleOrderTable: React.FC = () => {
         closable={false}
       >
         {currentItem?.orderNo && (
-          <ProDescriptions<API.SaleOrderListItem>
+          <ProDescriptions<API.StoreStockInOrderListItem>
             column={2}
-            title={'订单详情'}
+            title={'入库单详情'}
             request={async () => ({
               data: currentItem || {},
             })}
             params={{
               id: currentItem?.id,
             }}
-            columns={columns as ProDescriptionsItemProps<API.SaleOrderListItem>[]}
+            columns={columns as ProDescriptionsItemProps<API.StoreStockInOrderListItem>[]}
           />
         )}
       </Drawer>

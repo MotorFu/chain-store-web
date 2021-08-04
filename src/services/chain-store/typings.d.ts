@@ -24,7 +24,7 @@ declare namespace API {
     phone?: string;
     type: number;
     enabled: boolean;
-    createdTime: number;
+    createdAt: number;
   };
 
   type StoreList = {
@@ -42,7 +42,7 @@ declare namespace API {
     phone?: string;
     address?: string;
     enabled: boolean;
-    createdTime?: number;
+    createdAt?: number;
   };
 
   type AccountRole = 1 | 2; // admin | cashier
@@ -59,7 +59,7 @@ declare namespace API {
     accountId?: number;
     storeId?: number;
     role?: AccountRoleEnum;
-    createdTime?: number;
+    createdAt?: number;
   };
 
   type CurrentUser = {
@@ -93,7 +93,7 @@ declare namespace API {
     originalPrice: number;
     retailPrice: number;
     enabled: boolean;
-    createdTime?: number;
+    createdAt?: number;
   };
 
   type CategoryList = {
@@ -108,7 +108,7 @@ declare namespace API {
     key?: string;
     name: string;
     enabled: boolean;
-    createdTime?: number;
+    createdAt?: number;
   };
 
   type SaleOrderList = {
@@ -127,7 +127,7 @@ declare namespace API {
     storeName: string;
     accountId: number;
     accountName: string;
-    createdTime?: number;
+    createdAt?: number;
     payTime?: number;
     payType?: number;
     SaleOrderItem?: [];
@@ -154,7 +154,7 @@ declare namespace API {
     payAmount: number;
     payTime: number;
 
-    createdTime?: number;
+    createdAt?: number;
   };
 
   //订单明细
@@ -187,7 +187,7 @@ declare namespace API {
     storeProductSkuInfo: string;
     price: number;
     stock: number;
-    createdTime?: number;
+    createdAt?: number;
   };
 
   // 门店商品采购
@@ -207,7 +207,7 @@ declare namespace API {
     storeName: string;
     orderNo: string;
     status: PurchaseOrderStatus;
-    createdTime?: number;
+    createdAt?: number;
   };
 
   type StorePurchaseOrderItemList = {
@@ -248,9 +248,9 @@ declare namespace API {
     storeName: string;
     orderNo: string;
     source: StockInOrderSource;
-    source_order_id: number; //1:草稿，2：待入库，3：已入库
+    sourceOrderId: number; //1:草稿，2：待入库，3：已入库
     status: StockInOrderStatus;
-    createdTime?: number;
+    createdAt?: number;
   };
 
   type StoreStockInOrderItemList = {
@@ -289,8 +289,9 @@ declare namespace API {
     storeId: number;
     storeName: string;
     orderNo: string;
+    productCount: number;
     status: TakeStockOrderStatus;
-    createdTime?: number;
+    createdAt?: number;
   };
 
   type StoreTakeStockOrderItemList = {
@@ -337,7 +338,7 @@ declare namespace API {
     storeProductSkuInfo: string;
     type: StockLogType;
     stock: number;
-    createdTime: number;
+    createdAt: number;
   };
 
   type RuleListItem = {

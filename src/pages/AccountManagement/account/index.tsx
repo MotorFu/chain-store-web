@@ -4,7 +4,7 @@ import ProTable, { ActionType, ProColumns } from '@ant-design/pro-table';
 import { Button, Dropdown, Menu, Space, Tag } from 'antd';
 import { PlusOutlined, RightOutlined } from '@ant-design/icons';
 
-import { findAccount, updateAccount } from '@/services/ant-design-pro/AccountApi';
+import { findAccount, updateAccount } from '@/services/chain-store/AccountApi';
 import EditForm from './components/EditForm';
 
 const AccountTable: React.FC = () => {
@@ -107,15 +107,15 @@ const AccountTable: React.FC = () => {
     },
     {
       title: '创建时间',
-      key: 'createdTime',
-      dataIndex: 'createdTime',
+      key: 'createdAt',
+      dataIndex: 'createdAt',
       valueType: 'dateTime',
       sorter: true,
       hideInSearch: true,
     },
     {
       title: '创建时间',
-      dataIndex: 'createdTime',
+      dataIndex: 'createdAt',
       valueType: 'dateRange',
       hideInTable: true,
       search: {

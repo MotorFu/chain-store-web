@@ -3,7 +3,7 @@ import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import ProTable, { ActionType, ProColumns } from '@ant-design/pro-table';
 import { Button, Drawer, Space } from 'antd';
 
-import { findSaleOrder, removeSaleOrder } from '@/services/ant-design-pro/SaleOrderApi';
+import { findSaleOrder, removeSaleOrder } from '@/services/chain-store/SaleOrderApi';
 import ProDescriptions, { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
 
 const SaleOrderTable: React.FC = () => {
@@ -55,8 +55,8 @@ const SaleOrderTable: React.FC = () => {
     },
     {
       title: '创建时间',
-      key: 'createdTime',
-      dataIndex: 'createdTime',
+      key: 'createdAt',
+      dataIndex: 'createdAt',
       valueType: 'dateTime',
       sorter: true,
       hideInSearch: true,

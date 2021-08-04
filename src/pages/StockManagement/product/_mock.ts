@@ -28,7 +28,7 @@ const genList = (current: number, pageSize: number) => {
         .add(-(pageSize - i), 'day')
         .add(50, 'second')
         .valueOf(),
-      createdTime: dayjs()
+      createdAt: dayjs()
         .add(-(pageSize - i), 'day')
         .valueOf(),
     });
@@ -117,9 +117,5 @@ function findPage(req: Request, res: Response, u: string) {
 
 export default {
   // GET POST 可省略
-  'GET /api/saleOrder': findPage,
-
-  'DELETE /api/saleOrder/{id}': (req: Request, res: Response) => {
-    res.send({ status: 'ok', success: true });
-  },
+  'GET /api/store/product/stock': findPage,
 };

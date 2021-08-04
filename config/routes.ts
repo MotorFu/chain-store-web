@@ -101,31 +101,30 @@
     name: 'stock',
     icon: 'gold',
     access: 'canAdmin',
-    component: './Admin',
     routes: [
       {
         path: '/stock/product-page',
         name: 'product-list',
         icon: 'smile',
-        component: './Welcome',
+        component: './StockManagement/product',
       },
       {
         path: '/stock/purchase-order-page',
         name: 'purchase-list',
         icon: 'smile',
-        component: './Welcome',
+        component: './StockManagement/purchase',
       },
       {
         path: '/stock/stock-in-order-page',
         name: 'stock-in-list',
         icon: 'smile',
-        component: './Welcome',
+        component: './StockManagement/StockIn',
       },
       {
         path: '/stock/take-stock-order-page',
         name: 'take-stock-list',
         icon: 'smile',
-        component: './Welcome',
+        component: './StockManagement/TakeStock',
       },
       {
         component: './404',
@@ -137,7 +136,6 @@
     name: 'stat',
     icon: 'dashboard',
     access: 'canAdmin',
-    component: './Admin',
     routes: [
       {
         path: '/stat/product',

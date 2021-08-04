@@ -16,7 +16,7 @@ const genList = (current: number, pageSize: number) => {
       key: `${index + 1}`,
       name: `分类_ ${index}`,
       enabled: i % 4 !== 0,
-      createdTime: dayjs()
+      createdAt: dayjs()
         .add(-(pageSize - i), 'day')
         .valueOf(),
     });
@@ -118,7 +118,7 @@ export default {
       image: image[0].thumbUrl,
       name,
       enabled: true,
-      createdTime: dayjs().valueOf(),
+      createdAt: dayjs().valueOf(),
     };
     tableListDataSource.push(item);
     res.send({ status: 'ok', success: true });

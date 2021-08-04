@@ -6,7 +6,7 @@ import { Button, Drawer, Space } from 'antd';
 import {
   findPurchaseOrder,
   removePurchaseOrder,
-} from '@/services/ant-design-pro/StockApi/PurchaseOrder';
+} from '@/services/chain-store/StockApi/PurchaseOrder';
 import ProDescriptions, { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
 
 const SaleOrderTable: React.FC = () => {
@@ -42,8 +42,8 @@ const SaleOrderTable: React.FC = () => {
 
     {
       title: '创建时间',
-      key: 'createdTime',
-      dataIndex: 'createdTime',
+      key: 'createdAt',
+      dataIndex: 'createdAt',
       valueType: 'dateTime',
       sorter: true,
       hideInSearch: true,
@@ -117,16 +117,16 @@ const SaleOrderTable: React.FC = () => {
         closable={false}
       >
         {currentItem?.orderNo && (
-          <ProDescriptions<API.SaleOrderListItem>
+          <ProDescriptions<API.StorePurchaseOrderListItem>
             column={2}
-            title={'订单详情'}
+            title={'采购单详情'}
             request={async () => ({
               data: currentItem || {},
             })}
             params={{
               id: currentItem?.id,
             }}
-            columns={columns as ProDescriptionsItemProps<API.SaleOrderListItem>[]}
+            columns={columns as ProDescriptionsItemProps<API.StorePurchaseOrderListItem>[]}
           />
         )}
       </Drawer>

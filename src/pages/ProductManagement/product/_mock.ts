@@ -39,7 +39,7 @@ const genList = (current: number, pageSize: number) => {
       originalPrice: Math.ceil(Math.random() * 10000) + 10000,
       retailPrice: Math.ceil(Math.random() * 20000) + 20000,
       enabled: i % 4 !== 0,
-      createdTime: dayjs()
+      createdAt: dayjs()
         .add(-(pageSize - i), 'day')
         .valueOf(),
     });
@@ -145,7 +145,7 @@ export default {
       originalPrice,
       retailPrice,
       enabled: true,
-      createdTime: dayjs().valueOf(),
+      createdAt: dayjs().valueOf(),
     };
     tableListDataSource.push(item);
     res.send({ status: 'ok', success: true });
