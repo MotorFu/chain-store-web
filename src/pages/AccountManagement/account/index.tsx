@@ -6,6 +6,7 @@ import { PlusOutlined, RightOutlined } from '@ant-design/icons';
 
 import { findAccount, updateAccount } from '@/services/chain-store/AccountApi';
 import EditForm from './components/EditForm';
+import { PaginationConfig } from '@/StoreConst';
 
 const AccountTable: React.FC = () => {
   const [showEditModal, setShowEditModal] = useState(false);
@@ -167,6 +168,7 @@ const AccountTable: React.FC = () => {
   return (
     <PageContainer>
       <ProTable<API.AccountListItem, API.PageParams>
+        pagination={PaginationConfig}
         headerTitle={'headerTitle'}
         actionRef={actionRef}
         rowKey="key"

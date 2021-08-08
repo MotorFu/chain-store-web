@@ -11,6 +11,7 @@ import {
   updateCategory,
 } from '@/services/chain-store/ProductApi/category';
 import EditForm from './components/EditForm';
+import { PaginationConfig } from '@/StoreConst';
 
 const AccountTable: React.FC = () => {
   const [showEditModal, setShowEditModal] = useState(false);
@@ -126,6 +127,7 @@ const AccountTable: React.FC = () => {
   return (
     <PageContainer>
       <ProTable<API.CategoryListItem, API.PageParams>
+        pagination={PaginationConfig}
         headerTitle={'headerTitle'}
         actionRef={actionRef}
         rowKey="key"

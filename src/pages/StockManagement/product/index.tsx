@@ -5,6 +5,7 @@ import { Button, Drawer, Space } from 'antd';
 
 import { findSaleOrder, removeSaleOrder } from '@/services/chain-store/SaleOrderApi';
 import ProDescriptions, { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
+import { PaginationConfig } from '@/StoreConst';
 
 const SaleOrderTable: React.FC = () => {
   const [showViewDrawer, setShowViewDrawer] = useState(false);
@@ -85,6 +86,7 @@ const SaleOrderTable: React.FC = () => {
   return (
     <PageContainer>
       <ProTable<API.SaleOrderListItem, API.PageParams>
+        pagination={PaginationConfig}
         headerTitle={'headerTitle'}
         actionRef={actionRef}
         rowKey="key"

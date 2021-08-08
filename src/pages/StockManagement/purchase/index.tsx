@@ -8,6 +8,7 @@ import {
   removePurchaseOrder,
 } from '@/services/chain-store/StockApi/PurchaseOrder';
 import ProDescriptions, { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
+import { PaginationConfig } from '@/StoreConst';
 
 const SaleOrderTable: React.FC = () => {
   const [showViewDrawer, setShowViewDrawer] = useState(false);
@@ -72,6 +73,7 @@ const SaleOrderTable: React.FC = () => {
   return (
     <PageContainer>
       <ProTable<API.StorePurchaseOrderListItem, API.PageParams>
+        pagination={PaginationConfig}
         headerTitle={'headerTitle'}
         actionRef={actionRef}
         rowKey="key"
