@@ -1,10 +1,10 @@
 import React, { useState, useRef } from 'react';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import ProTable, { ActionType, ProColumns } from '@ant-design/pro-table';
-import { Button, Dropdown, Menu, Space, Tag } from 'antd';
+import { Button, Dropdown, Menu, Space, Tag, Modal } from 'antd';
 import { PlusOutlined, RightOutlined } from '@ant-design/icons';
 
-import { findAccount, updateAccount } from '@/services/chain-store/AccountApi';
+import { findAccount, updateAccount, updateEnabled } from '@/services/chain-store/AccountApi';
 import EditForm from './components/EditForm';
 import { PaginationConfig } from '@/StoreConst';
 
@@ -144,7 +144,26 @@ const AccountTable: React.FC = () => {
           >
             编辑
           </a>
-          <a key="enabled">{item.enabled ? '禁用' : '启用'}</a>
+          <a
+            key="enabled"
+            onClick={() => {
+              Modal.confirm({
+                title: '提示',
+                content: <div>确定要{item.enabled ? '禁用' : '开启'}账号？</div>,
+                onOk: async (e) => {
+                  console.log('----', e);
+                  const success = await updateEnabled(item);
+                  if (success) {
+                    if (actionRef.current) {
+                      actionRef.current.reload();
+                    }
+                  }
+                },
+              });
+            }}
+          >
+            {item.enabled ? '禁用1' : '启用1'}
+          </a>
           <Dropdown
             key="more"
             trigger={['click']}

@@ -146,15 +146,25 @@ function findPage(req: Request, res: Response, u: string) {
   return res.json(result);
 }
 
+function updateEnabled(req: Request, res: Response) {
+  console.log('update enabled params---->', req.body);
+
+  // tableListDataSource.filter(it => it.id === id);
+
+  res.send({ status: 'ok', success: true });
+}
+
 export default {
   // GET POST 可省略
   'GET /api/account': findPage,
 
   'POST /api/account': (req: Request, res: Response) => {
-    res.send({ status: 'ok', currentAuthority: 'user', success: true });
+    res.send({ status: 'ok', success: true });
   },
 
   'PUT /api/account': (req: Request, res: Response) => {
-    res.send({ status: 'ok', currentAuthority: 'user', success: true });
+    res.send({ status: 'ok', success: true });
   },
+
+  'PUT /api/account/enabled': updateEnabled,
 };
