@@ -16,8 +16,7 @@ export enum StoreRoleEnum {
   CASHIER = 3, // 门店收银员
 }
 
-export default {
-  AccountTypeEnum,
-  StoreRoleEnum,
-  PaginationConfig,
-};
+// export default {
+//   AccountTypeEnum,
+//   StoreRoleEnum
+// }

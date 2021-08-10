@@ -14,7 +14,7 @@ import {
 import EditForm from './components/EditForm';
 import { PaginationConfig } from '@/StoreConst';
 
-const AccountTable: React.FC = () => {
+const StoreTable: React.FC = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const actionRef = useRef<ActionType>();
 
@@ -228,4 +228,4 @@ const AccountTable: React.FC = () => {
   );
 };
 
-export default AccountTable;
+export default StoreTable;
