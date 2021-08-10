@@ -4,9 +4,16 @@ import ProTable, { ActionType, ProColumns } from '@ant-design/pro-table';
 import { Button, Dropdown, Menu, Space, Tag, Modal } from 'antd';
 import { PlusOutlined, RightOutlined } from '@ant-design/icons';
 
-import { findAccount, updateAccount, updateEnabled } from '@/services/chain-store/AccountApi';
+import {
+  findAccount,
+  updateAccount,
+  updateAccountEnabled,
+  removeAccount,
+} from '@/services/chain-store/AccountApi';
 import EditForm from './components/EditForm';
 import { PaginationConfig } from '@/StoreConst';
+
+// import {tableListDataSource as StoreDataSource} from "@/pages/AccountManagement/store/_mock";
 
 const AccountTable: React.FC = () => {
   const [showEditModal, setShowEditModal] = useState(false);
@@ -139,6 +146,7 @@ const AccountTable: React.FC = () => {
       key: 'option',
       dataIndex: 'option',
       hideInSearch: true,
+      width: 160,
       render: (_, item) => (
         <Space size="middle">
           <a
@@ -150,23 +158,7 @@ const AccountTable: React.FC = () => {
           >
             编辑
           </a>
-          <a
-            key="enabled"
-            onClick={() => {
-              Modal.confirm({
-                title: '提示',
-                content: <div>确定要{item.enabled ? '禁用' : '开启'}账号？</div>,
-                onOk: async () => {
-                  const success = await updateEnabled(item);
-                  if (success) {
-                    if (actionRef.current) {
-                      actionRef.current.reload();
-                    }
-                  }
-                },
-              });
-            }}
-          >
+          <a key="enabled" onClick={() => updateEnabledFunc(item)}>
             {item.enabled ? '禁用' : '启用'}
           </a>
           <Dropdown
@@ -176,7 +168,11 @@ const AccountTable: React.FC = () => {
               <Menu>
                 <Menu.Item key={0}>修改密码</Menu.Item>
                 <Menu.Item key={1}>所属门店</Menu.Item>
-                <Menu.Item key={2}>删除账号</Menu.Item>
+                {item.type !== 1 ? null : (
+                  <Menu.Item key={2} onClick={() => removeFunc(item)}>
+                    删除账号
+                  </Menu.Item>
+                )}
               </Menu>
             }
           >
@@ -189,6 +185,39 @@ const AccountTable: React.FC = () => {
       ),
     },
   ];
+
+  function updateEnabledFunc(item: API.AccountListItem) {
+    Modal.confirm({
+      title: '提示',
+      content: <div>确定要{item.enabled ? '禁用' : '开启'}账号？</div>,
+      onOk: async () => {
+        const success = await updateAccountEnabled(item);
+        if (success) {
+          if (actionRef.current) {
+            actionRef.current.reload();
+          }
+        }
+      },
+    });
+  }
+
+  function removeFunc(item: API.AccountListItem) {
+    Modal.confirm({
+      title: '提示',
+      content: <div>确定要删除【{item.username}】账号？</div>,
+      onOk: async () => {
+        const success = await removeAccount({
+          data: [item],
+        });
+        if (success) {
+          if (actionRef.current) {
+            actionRef.current.reload();
+          }
+        }
+      },
+    });
+  }
+
   return (
     <PageContainer>
       <ProTable<API.AccountListItem, API.PageParams>
@@ -232,7 +261,7 @@ const AccountTable: React.FC = () => {
           <Button
             onClick={async () => {
               console.log('selectedRowsState--->', selectedRowsState);
-              // await handleRemove(selectedRowsState);
+              await removeAccount({ data: selectedRowsState });
               setSelectedRows([]);
               actionRef.current?.reloadAndRest?.();
             }}

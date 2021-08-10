@@ -1,14 +1,15 @@
 import React, { useState, useRef } from 'react';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import ProTable, { ActionType, ProColumns } from '@ant-design/pro-table';
-import { Button, Dropdown, Menu, Space, Tag } from 'antd';
-import { PlusOutlined, RightOutlined } from '@ant-design/icons';
+import { Button, Modal, Space, Tag } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 
 import {
   findStore,
   addStore,
   removeStore,
   updateStore,
+  updateStoreEnabled,
 } from '@/services/chain-store/AccountApi/store';
 import EditForm from './components/EditForm';
 import { PaginationConfig } from '@/StoreConst';
@@ -92,6 +93,7 @@ const AccountTable: React.FC = () => {
       key: 'option',
       dataIndex: 'option',
       hideInSearch: true,
+      width: 160,
       render: (_, item) => (
         <Space size="middle">
           <a
@@ -103,27 +105,49 @@ const AccountTable: React.FC = () => {
           >
             编辑
           </a>
-          <a key="enabled">{item.enabled ? '禁用' : '启用'}</a>
-          <Dropdown
-            key="more"
-            trigger={['click']}
-            overlay={
-              <Menu>
-                <Menu.Item key={0}>修改密码</Menu.Item>
-                <Menu.Item key={1}>所属门店</Menu.Item>
-                <Menu.Item key={2}>删除账号</Menu.Item>
-              </Menu>
-            }
-          >
-            <a>
-              更多
-              <RightOutlined />
-            </a>
-          </Dropdown>
+          <a key="enabled" onClick={() => updateEnabledFunc(item)}>
+            {item.enabled ? '禁用' : '启用'}
+          </a>
+          <a key="delete" onClick={() => removeFunc(item)}>
+            删除
+          </a>
         </Space>
       ),
     },
   ];
+
+  function updateEnabledFunc(item: API.StoreListItem) {
+    Modal.confirm({
+      title: '提示',
+      content: <div>确定要{item.enabled ? '禁用' : '开启'}门店？</div>,
+      onOk: async () => {
+        const success = await updateStoreEnabled(item);
+        if (success) {
+          if (actionRef.current) {
+            actionRef.current.reload();
+          }
+        }
+      },
+    });
+  }
+
+  function removeFunc(item: API.StoreListItem) {
+    Modal.confirm({
+      title: '提示',
+      content: <div>确定要删除【{item.name}】门店？</div>,
+      onOk: async () => {
+        const success = await removeStore({
+          data: [item],
+        });
+        if (success) {
+          if (actionRef.current) {
+            actionRef.current.reload();
+          }
+        }
+      },
+    });
+  }
+
   return (
     <PageContainer>
       <ProTable<API.StoreListItem, API.PageParams>
@@ -167,7 +191,7 @@ const AccountTable: React.FC = () => {
           <Button
             onClick={async () => {
               console.log('selectedRowsState--->', selectedRowsState);
-              await removeStore(selectedRowsState);
+              await removeStore({ data: selectedRowsState });
               setSelectedRows([]);
               actionRef.current?.reloadAndRest?.();
             }}

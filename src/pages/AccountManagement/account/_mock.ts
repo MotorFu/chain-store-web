@@ -4,6 +4,7 @@ import { parse } from 'url';
 import { parseInt } from 'lodash';
 
 import { Random, mock } from 'mockjs';
+import { AccountTypeEnum } from '../../../StoreConst';
 
 const AccountIcons: string[] = [
   'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
@@ -14,9 +15,11 @@ const AccountIcons: string[] = [
   'https://pic.jiadown.com/upload/image/202012/2020061409134817239.jpg',
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRT4YFJKSelGZbbIeSQNA7Xt4u59SEvhVcWhA&usqp=CAU',
   'https://is5-ssl.mzstatic.com/image/thumb/Purple124/v4/d4/a2/4c/d4a24c9b-06d1-66df-06af-abcfed3e594f/source/512x512bb.jpg',
-  'https://lh3.googleusercontent.com/proxy/b51mrNoSDHXlmQ_1TjVth8HZ2XE2-CigNzBzrCxy5s-3yyVw8RcLOYcqOnJ-SwdNhO6phgP8yx4e1wTtj7GmAhZMEAscsx89-oshWFII_VLS3IihaSax',
-  'https://lh3.googleusercontent.com/proxy/apNpAhv6U48UTuijv0WB75TvaWzjjVMmYHfDsm50TzW23GxIeF_qY72jFzIcmRdJ7BqMreH3UOI2lUaoZWrEFY6B4GOR_d6WqFEIFx5-w3ic',
+  'https://i.pinimg.com/474x/eb/d0/02/ebd002f69ccba8c11d7a35aef69a820e.jpg',
+  'https://i02piccdn.sogoucdn.com/2bc81f961306802d',
   'https://images.liqucn.com/img/h24/h39/img_localize_61556803b7d62382719231e994975359_400x400.png',
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGudQGDQO6AzHAyaXZj4XtUWDdULk4teFuKQ&usqp=CAU',
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGb3fxzqCxmspQ3FQyyNeR35T8SP2l1NYyLA&usqp=CAU',
 ];
 // mock tableListDataSource
 const genList = (current: number, pageSize: number) => {
@@ -30,7 +33,7 @@ const genList = (current: number, pageSize: number) => {
     icon: AccountIcons[0],
     phone: '18616352386',
     enabled: true,
-    type: 1,
+    type: AccountTypeEnum.SUPER_ADMIN.valueOf(),
     createdAt: dayjs().valueOf(),
   });
 
@@ -42,7 +45,7 @@ const genList = (current: number, pageSize: number) => {
       icon: AccountIcons[Random.natural(0, AccountIcons.length - 1)],
       phone: mock(/^1[3456789]\d{9}$/),
       enabled: Random.boolean(),
-      type: 2,
+      type: AccountTypeEnum.NORMAL_ADMIN.valueOf(),
       createdAt: dayjs()
         .add(-(pageSize - i), 'day')
         .valueOf(),
@@ -53,13 +56,13 @@ const genList = (current: number, pageSize: number) => {
     const index: number = (current - 1) * 10 + i;
 
     tableListDataSource.push({
-      id: index + 3,
-      key: `${index + 3}`,
+      id: index + 7,
+      key: `${index + 7}`,
       username: `store_ ${Random.word(5, 10)}`,
       icon: AccountIcons[Random.natural(0, AccountIcons.length - 1)],
       phone: mock(/^1[3456789]\d{9}$/),
       enabled: Random.boolean(5, pageSize, false),
-      type: 3,
+      type: AccountTypeEnum.STORE_ADMIN.valueOf(),
       createdAt: dayjs()
         .add(-(pageSize - i), 'day')
         .valueOf(),
@@ -69,7 +72,7 @@ const genList = (current: number, pageSize: number) => {
   return tableListDataSource;
 };
 // 源数据
-const tableListDataSource = genList(1, 20);
+export const tableListDataSource = genList(1, 20);
 
 /**
  * 拷贝数据
@@ -170,6 +173,15 @@ function updateEnabled(req: Request, res: Response) {
   res.send({ status: 'ok', success: true });
 }
 
+function remove(req: Request, res: Response) {
+  const items = req.body as API.AccountListItem[];
+  items.forEach((item) => {
+    const itemIndex = tableListDataSource.findIndex((it) => it.id === item.id);
+    tableListDataSource.splice(itemIndex, 1);
+  });
+  res.send({ status: 'ok', success: true });
+}
+
 export default {
   // GET POST 可省略
   'GET /api/account': findPage,
@@ -183,4 +195,6 @@ export default {
   },
 
   'PUT /api/account/enabled': updateEnabled,
+
+  'DELETE /api/account': remove,
 };

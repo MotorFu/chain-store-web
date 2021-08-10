@@ -2,7 +2,12 @@ import type { Request, Response } from 'express';
 import dayjs from 'dayjs';
 import { parse } from 'url';
 import { parseInt } from 'lodash';
+import { Random, mock } from 'mockjs';
 
+const StoreImages: string[] = [
+  'https://img2.fr-trading.com/0/2_592_67091_800_600.jpg.webp',
+  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRK8fMtwaPzUkLKdDdo8dtkMAT0pomCy8WBSg&usqp=CAU',
+];
 // mock tableListDataSource
 const genList = (current: number, pageSize: number) => {
   console.log('store init data');
@@ -14,13 +19,10 @@ const genList = (current: number, pageSize: number) => {
     tableListDataSource.push({
       id: index + 1,
       key: `${index + 1}`,
-      name: `店名_ ${index}`,
-      image: [
-        'https://gw.alipayobjects.com/zos/rmsportal/eeHMaZBwmTvLdIwMfBpg.png',
-        'https://gw.alipayobjects.com/zos/rmsportal/udxAbMEhpwthVVcjLXik.png',
-      ][i % 2],
+      name: `${mock('@ctitle(3,7)')}`,
+      image: StoreImages[Random.natural(0, StoreImages.length - 1)],
       phone: `${16688000000 + i}`,
-      address: '上海市徐汇区',
+      address: mock('@county(true)'),
       enabled: i % 4 !== 0,
       createdAt: dayjs()
         .add(-(pageSize - i), 'day')
@@ -31,7 +33,7 @@ const genList = (current: number, pageSize: number) => {
   return tableListDataSource;
 };
 // 源数据
-const tableListDataSource = genList(1, 15);
+export const tableListDataSource = genList(1, 15);
 
 /**
  * 拷贝数据
@@ -114,6 +116,22 @@ function findPage(req: Request, res: Response, u: string) {
   return res.json(result);
 }
 
+function updateEnabled(req: Request, res: Response) {
+  const { id, enabled } = req.body;
+  const item = tableListDataSource.filter((it) => it.id === id)[0];
+  item.enabled = !enabled;
+  res.send({ status: 'ok', success: true });
+}
+
+function remove(req: Request, res: Response) {
+  const items = req.body as API.StoreListItem[];
+  items.forEach((item) => {
+    const itemIndex = tableListDataSource.findIndex((it) => it.id === item.id);
+    tableListDataSource.splice(itemIndex, 1);
+  });
+  res.send({ status: 'ok', success: true });
+}
+
 export default {
   // GET POST 可省略
   'GET /api/store': findPage,
@@ -138,7 +156,7 @@ export default {
     res.send({ status: 'ok', success: true });
   },
 
-  'PUT /api/store': (req: Request, res: Response) => {
-    res.send({ status: 'ok', success: true });
-  },
+  'PUT /api/store/enabled': updateEnabled,
+
+  'DELETE /api/store': remove,
 };

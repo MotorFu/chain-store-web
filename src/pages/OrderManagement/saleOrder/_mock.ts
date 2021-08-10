@@ -2,8 +2,10 @@ import type { Request, Response } from 'express';
 import dayjs from 'dayjs';
 import { parse } from 'url';
 import { parseInt } from 'lodash';
-// import { PayTypes } from '@/services/SysConst';
+// import {tableListDataSource as AccountDataSource} from "@/pages/AccountManagement/account/_mock";
+
 export const PayTypes: number[] = [1, 2, 3];
+
 // mock tableListDataSource
 const genList = (current: number, pageSize: number) => {
   console.log('saleOrder init data');

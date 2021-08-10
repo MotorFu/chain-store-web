@@ -32,7 +32,10 @@ export async function updateAccount(options?: { [key: string]: any }) {
   });
 }
 
-export async function updateEnabled(item: API.AccountListItem, options?: { [key: string]: any }) {
+export async function updateAccountEnabled(
+  item: API.AccountListItem,
+  options?: { [key: string]: any },
+) {
   return request<Record<string, any>>(`/api/account/enabled`, {
     method: 'PUT',
     data: item,

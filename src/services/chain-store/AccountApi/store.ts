@@ -10,7 +10,7 @@ export async function findStore(
   },
   sorter?: any,
   filter?: any,
-  options?: { [key: string]: any },
+  options?: Record<string, any>,
 ) {
   return request<API.StoreList>('/api/store', {
     method: 'GET',
@@ -24,15 +24,24 @@ export async function findStore(
 }
 
 export async function updateStore(options?: { [key: string]: any }) {
-  console.log('options', options);
   return request<API.StoreListItem>('/api/store', {
     method: 'PUT',
     ...(options || {}),
   });
 }
 
+export async function updateStoreEnabled(
+  body: API.StoreListItem,
+  options?: { [key: string]: any },
+) {
+  return request<API.StoreListItem>('/api/store/enabled', {
+    method: 'PUT',
+    data: body,
+    ...(options || {}),
+  });
+}
+
 export async function addStore(body: API.StoreListItem, options?: { [key: string]: any }) {
-  console.log('options', options);
   return request<API.StoreListItem>('/api/store', {
     method: 'POST',
     headers: {
@@ -44,6 +53,7 @@ export async function addStore(body: API.StoreListItem, options?: { [key: string
 }
 
 export async function removeStore(options?: { [key: string]: any }) {
+  console.log('removeStore options--->', options);
   return request<Record<string, any>>('/api/store', {
     method: 'DELETE',
     ...(options || {}),
