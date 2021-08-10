@@ -24,6 +24,12 @@ const AccountTable: React.FC = () => {
       sorter: true,
     },
     {
+      title: '头像',
+      key: 'icon',
+      dataIndex: 'icon',
+      valueType: 'avatar',
+    },
+    {
       title: '账号',
       key: 'username',
       dataIndex: 'username',
@@ -58,20 +64,20 @@ const AccountTable: React.FC = () => {
       render: (dom, item) => {
         if (item.type === 1) {
           return (
-            <Tag color="success" key={item.key}>
+            <Tag color="#108ee9" key={item.key}>
               超级管理员
             </Tag>
           );
         }
         if (item.type === 2) {
           return (
-            <Tag color="#2db7f5" key={item.key}>
+            <Tag color="cyan" key={item.key}>
               系统管理员
             </Tag>
           );
         }
         return (
-          <Tag color="#108ee9" key={item.key}>
+          <Tag color="purple" key={item.key}>
             门店管理员
           </Tag>
         );
@@ -150,8 +156,7 @@ const AccountTable: React.FC = () => {
               Modal.confirm({
                 title: '提示',
                 content: <div>确定要{item.enabled ? '禁用' : '开启'}账号？</div>,
-                onOk: async (e) => {
-                  console.log('----', e);
+                onOk: async () => {
                   const success = await updateEnabled(item);
                   if (success) {
                     if (actionRef.current) {
@@ -162,7 +167,7 @@ const AccountTable: React.FC = () => {
               });
             }}
           >
-            {item.enabled ? '禁用1' : '启用1'}
+            {item.enabled ? '禁用' : '启用'}
           </a>
           <Dropdown
             key="more"

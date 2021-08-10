@@ -2,9 +2,9 @@ import type { Request, Response } from 'express';
 import dayjs from 'dayjs';
 import { parse } from 'url';
 import { parseInt } from 'lodash';
-
+import mockjs from 'mockjs';
 // mock tableListDataSource
-
+const { Random } = mockjs;
 const ProductImages: string[] = [
   'https://img10.360buyimg.com/seckillcms/s500x500_jfs/t1/187950/40/15614/86418/610264e5Efa9fd905/69a51b998c66d047.png',
   'https://img12.360buyimg.com/seckillcms/s500x500_jfs/t1/177068/25/5425/124485/60a90f9fEc01a8294/90e74b4deeea25d9.jpg',
@@ -28,16 +28,15 @@ const genList = (current: number, pageSize: number) => {
 
   for (let i = 0; i < pageSize; i += 1) {
     const index: number = (current - 1) * 10 + i;
-
     tableListDataSource.push({
       id: index + 1,
       key: `${index + 1}`,
-      name: `店名_ ${index}`,
-      image: ProductImages[ProductImages.length % (index + 1)],
-      description: `商品描述_${index + 1}`,
+      name: `店名_ ${mockjs.mock('@ctitle()')}`,
+      image: ProductImages[Random.natural(0, ProductImages.length)],
+      description: `商品描述_${mockjs.mock('@cparagraph(1, 3)')}`,
       unit: '件',
-      originalPrice: Math.ceil(Math.random() * 10000) + 10000,
-      retailPrice: Math.ceil(Math.random() * 20000) + 20000,
+      originalPrice: mockjs.mock('@natural(10000,20000)'),
+      retailPrice: mockjs.mock('@natural(20000,30000)'),
       enabled: i % 4 !== 0,
       createdAt: dayjs()
         .add(-(pageSize - i), 'day')

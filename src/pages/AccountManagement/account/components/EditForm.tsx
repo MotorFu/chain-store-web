@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal } from 'antd';
-import { ProFormText, ProFormUploadButton, StepsForm } from '@ant-design/pro-form';
+import { ProFormSelect, ProFormText, ProFormUploadButton, StepsForm } from '@ant-design/pro-form';
 
 export type FormValueType = {
   target?: string;
@@ -51,8 +51,9 @@ const EditForm: React.FC<UpdateFormProps> = (props) => {
       >
         <ProFormUploadButton
           name="icon"
-          label="图片"
+          label="头像"
           max={1}
+          initialValue={[{ thumbUrl: props.values.icon }]}
           fieldProps={{
             name: 'file',
             listType: 'picture-card',
@@ -101,7 +102,26 @@ const EditForm: React.FC<UpdateFormProps> = (props) => {
           },
         }}
         title="账号类型"
-      ></StepsForm.StepForm>
+      >
+        <ProFormSelect
+          name="type"
+          label="账号类型"
+          valueEnum={{
+            china: '系统管理员',
+            usa: '门店管理员',
+          }}
+        />
+
+        <ProFormSelect
+          name="type"
+          label="门店角色"
+          valueEnum={{
+            superAdmin: '超级管理员',
+            normal: '普通管理员',
+            cashier: '收银员',
+          }}
+        />
+      </StepsForm.StepForm>
     </StepsForm>
   );
 };

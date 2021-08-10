@@ -27,6 +27,7 @@ const AccountTable: React.FC = () => {
       key: 'id',
       dataIndex: 'id',
       sorter: true,
+      width: 80,
     },
     {
       title: '图片',
@@ -49,6 +50,7 @@ const AccountTable: React.FC = () => {
       title: '计量单位',
       key: 'unit',
       dataIndex: 'unit',
+      width: 80,
     },
     {
       title: '状态',
@@ -56,6 +58,7 @@ const AccountTable: React.FC = () => {
       dataIndex: 'enabled',
       valueType: 'select',
       initialValue: '0',
+      width: 80,
       valueEnum: {
         0: {
           text: '不限',
@@ -91,6 +94,7 @@ const AccountTable: React.FC = () => {
       title: '操作',
       key: 'option',
       dataIndex: 'option',
+      width: 160,
       hideInSearch: true,
       render: (_, item) => (
         <Space size="middle">
