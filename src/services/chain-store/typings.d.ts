@@ -15,17 +15,27 @@ declare namespace API {
     success?: boolean;
   };
 
-  type AccountListItem = {
+  type BaseItem = {
     id: number;
     key: string;
+    enabled?: boolean;
+    createdAt: number;
+    createdBy?: number;
+    lastModifiedAt?: number;
+    lastModifiedBy?: number;
+  };
+
+  type AccountListItem = {
     username: string;
     password?: string;
     icon?: string;
     phone?: string;
     type: number;
-    enabled: boolean;
-    createdAt: number;
-  };
+    storeRelation?: {
+      storeId: number;
+      role: number;
+    };
+  } & BaseItem;
 
   type StoreList = {
     data?: StoreListItem[];
@@ -35,15 +45,11 @@ declare namespace API {
   };
 
   type StoreListItem = {
-    id: number;
-    key?: string;
     name: string;
     image?: string;
     phone?: string;
     address?: string;
-    enabled: boolean;
-    createdAt?: number;
-  };
+  } & BaseItem;
 
   type AccountRole = 1 | 2; // admin | cashier
 
@@ -94,7 +100,7 @@ declare namespace API {
     retailPrice: number;
     enabled: boolean;
     createdAt?: number;
-  };
+  } & BaseItem;
 
   type CategoryList = {
     data?: CategoryListItem[];
@@ -104,12 +110,8 @@ declare namespace API {
   };
 
   type CategoryListItem = {
-    id: number;
-    key?: string;
     name: string;
-    enabled: boolean;
-    createdAt?: number;
-  };
+  } & BaseItem;
 
   type SaleOrderList = {
     data?: SaleOrderListItem[];

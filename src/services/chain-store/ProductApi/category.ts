@@ -31,14 +31,20 @@ export async function updateCategory(options?: { [key: string]: any }) {
   });
 }
 
-export async function addCategory(body: API.CategoryListItem, options?: { [key: string]: any }) {
+export async function updateCategoryEnabled(options?: { [key: string]: any }) {
+  return request<API.ProductListItem>('/api/category/enabled', {
+    method: 'PUT',
+    ...(options || {}),
+  });
+}
+
+export async function addCategory(options?: { [key: string]: any }) {
   console.log('options', options);
   return request<API.CategoryListItem>('/api/category', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    data: body,
     ...(options || {}),
   });
 }

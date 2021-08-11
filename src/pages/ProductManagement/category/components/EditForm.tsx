@@ -1,7 +1,6 @@
 import React, { useRef } from 'react';
 import type { FormInstance } from 'antd';
 import { ModalForm, ProFormText } from '@ant-design/pro-form';
-import { Button } from 'antd';
 
 export type UpdateFormProps = {
   onCancel: (flag?: boolean, formVals?: API.CategoryListItem) => void;
@@ -25,7 +24,7 @@ const EditForm: React.FC<UpdateFormProps> = (props) => {
       visible={props.visible}
       formRef={formRef}
       modalProps={{
-        // destroyOnClose:true,
+        destroyOnClose: true,
         afterClose: () => {
           formRef.current?.resetFields();
         },
@@ -33,21 +32,13 @@ const EditForm: React.FC<UpdateFormProps> = (props) => {
           props.onCancel();
         },
       }}
-      submitter={{
-        render: ({ reset, submit }) => [
-          <Button key="cancel" onClick={() => props.onCancel()}>
-            取消
-          </Button>,
-          <Button key="reset" onClick={reset}>
-            重置
-          </Button>,
-          <Button key="submit" onClick={submit} type="primary">
-            提交
-          </Button>,
-        ],
+      initialValues={{
+        id: props.values.id,
+        name: props.values.name,
       }}
       onFinish={props.onSubmit}
     >
+      <ProFormText name="id" label="ID" hidden={true} />
       <ProFormText
         name="name"
         label="名称"

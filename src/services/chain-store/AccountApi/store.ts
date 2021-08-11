@@ -30,24 +30,19 @@ export async function updateStore(options?: { [key: string]: any }) {
   });
 }
 
-export async function updateStoreEnabled(
-  body: API.StoreListItem,
-  options?: { [key: string]: any },
-) {
+export async function updateStoreEnabled(options?: { [key: string]: any }) {
   return request<API.StoreListItem>('/api/store/enabled', {
     method: 'PUT',
-    data: body,
     ...(options || {}),
   });
 }
 
-export async function addStore(body: API.StoreListItem, options?: { [key: string]: any }) {
+export async function addStore(options?: { [key: string]: any }) {
   return request<API.StoreListItem>('/api/store', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    data: body,
     ...(options || {}),
   });
 }

@@ -31,14 +31,20 @@ export async function updateProduct(options?: { [key: string]: any }) {
   });
 }
 
-export async function addProduct(body: API.ProductListItem, options?: { [key: string]: any }) {
+export async function updateProductEnabled(options?: { [key: string]: any }) {
+  return request<API.ProductListItem>('/api/product/enabled', {
+    method: 'PUT',
+    ...(options || {}),
+  });
+}
+
+export async function addProduct(options?: { [key: string]: any }) {
   console.log('options', options);
   return request<API.ProductListItem>('/api/product', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    data: body,
     ...(options || {}),
   });
 }

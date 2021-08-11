@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 import { parse } from 'url';
 import { parseInt } from 'lodash';
 import { Random, mock } from 'mockjs';
+import { create, update, updateEnabled, remove } from '../../../../mock/_common_mock';
 
 const StoreImages: string[] = [
   'https://img2.fr-trading.com/0/2_592_67091_800_600.jpg.webp',
@@ -116,47 +117,18 @@ function findPage(req: Request, res: Response, u: string) {
   return res.json(result);
 }
 
-function updateEnabled(req: Request, res: Response) {
-  const { id, enabled } = req.body;
-  const item = tableListDataSource.filter((it) => it.id === id)[0];
-  item.enabled = !enabled;
-  res.send({ status: 'ok', success: true });
-}
-
-function remove(req: Request, res: Response) {
-  const items = req.body as API.StoreListItem[];
-  items.forEach((item) => {
-    const itemIndex = tableListDataSource.findIndex((it) => it.id === item.id);
-    tableListDataSource.splice(itemIndex, 1);
-  });
-  res.send({ status: 'ok', success: true });
-}
-
 export default {
-  // GET POST 可省略
   'GET /api/store': findPage,
 
-  // 添加门店
-  'POST /api/store': (req: Request, res: Response) => {
-    const { image, name, phone, address } = req.body;
-    const itemIdList: number[] = [];
-    tableListDataSource.forEach((item) => {
-      itemIdList.push(item.id);
-    });
-    const item = {
-      id: Math.max(...itemIdList) + 1,
-      image: image[0].thumbUrl,
-      name,
-      phone,
-      address,
-      enabled: true,
-      createdAt: dayjs().valueOf(),
-    };
-    tableListDataSource.push(item);
-    res.send({ status: 'ok', success: true });
-  },
+  'POST /api/store': (req: Request, res: Response) =>
+    create<API.StoreListItem>(req, res, tableListDataSource),
 
-  'PUT /api/store/enabled': updateEnabled,
+  'PUT /api/store': (req: Request, res: Response) =>
+    update<API.StoreListItem>(req, res, tableListDataSource),
 
-  'DELETE /api/store': remove,
+  'PUT /api/store/enabled': (req: Request, res: Response) =>
+    updateEnabled<API.StoreListItem>(req, res, tableListDataSource),
+
+  'DELETE /api/store': (req: Request, res: Response) =>
+    remove<API.StoreListItem>(req, res, tableListDataSource),
 };

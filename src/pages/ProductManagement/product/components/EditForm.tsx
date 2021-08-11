@@ -1,7 +1,6 @@
 import React, { useRef } from 'react';
 import type { FormInstance } from 'antd';
-import { ModalForm, ProFormText, ProFormUploadButton } from '@ant-design/pro-form';
-import { Button } from 'antd';
+import { ModalForm, ProFormText, ProFormTextArea, ProFormUploadButton } from '@ant-design/pro-form';
 
 // export type FormValueType =Partial<API.ProductListItem>;
 
@@ -27,7 +26,7 @@ const EditForm: React.FC<UpdateFormProps> = (props) => {
       visible={props.visible}
       formRef={formRef}
       modalProps={{
-        // destroyOnClose:true,
+        destroyOnClose: true,
         afterClose: () => {
           formRef.current?.resetFields();
         },
@@ -35,32 +34,27 @@ const EditForm: React.FC<UpdateFormProps> = (props) => {
           props.onCancel();
         },
       }}
-      submitter={{
-        render: ({ reset, submit }) => [
-          <Button key="cancel" onClick={() => props.onCancel()}>
-            取消
-          </Button>,
-          <Button key="reset" onClick={reset}>
-            重置
-          </Button>,
-          <Button key="submit" onClick={submit} type="primary">
-            提交
-          </Button>,
-        ],
+      initialValues={{
+        id: props.values.id,
+        image: props.values.image ? [{ thumbUrl: props.values.image }] : null,
+        name: props.values.name,
+        unit: '件',
+        originalPrice: props.values.originalPrice,
+        retailPrice: props.values.retailPrice,
+        description: props.values.description,
       }}
       onFinish={props.onSubmit}
     >
+      <ProFormText name="id" label="ID" hidden={true} />
       <ProFormUploadButton
         name="image"
-        initialValue={[{ thumbUrl: props.values.image }]}
         label="图片"
         max={1}
         fieldProps={{
           name: 'file',
           listType: 'picture-card',
         }}
-        action="/upload.do"
-        extra=""
+        transform={(value: any) => ({ icon: value[0].thumbUrl })}
         rules={[
           {
             required: true,
@@ -71,33 +65,41 @@ const EditForm: React.FC<UpdateFormProps> = (props) => {
       <ProFormText
         name="name"
         label="名称"
-        initialValue={props.values.name}
         rules={[
           {
             required: true,
-            message: '请输入账号！',
+            message: '请输入商品名称！',
+          },
+        ]}
+      />
+      <ProFormTextArea
+        name="description"
+        label="商品描述"
+        rules={[
+          {
+            required: true,
+            message: '请输入商品描述！',
+          },
+        ]}
+      />
+      <ProFormText name="unit" label="计量单位" hidden={true} />
+      <ProFormText
+        name="originalPrice"
+        label="原价"
+        rules={[
+          {
+            required: true,
+            message: '请输入原价！',
           },
         ]}
       />
       <ProFormText
-        name="phone"
-        label="联系电话"
-        initialValue={props.values.description}
+        name="retailPrice"
+        label="现价"
         rules={[
           {
             required: true,
-            message: '请输入联系电话！',
-          },
-        ]}
-      />
-      <ProFormText
-        name="address"
-        label="地址"
-        initialValue={props.values.unit}
-        rules={[
-          {
-            required: true,
-            message: '请输入门店地址！',
+            message: '请输入现价！',
           },
         ]}
       />

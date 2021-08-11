@@ -6,6 +6,7 @@ import { PlusOutlined, RightOutlined } from '@ant-design/icons';
 
 import {
   findAccount,
+  addAccount,
   updateAccount,
   updateAccountEnabled,
   removeAccount,
@@ -151,8 +152,8 @@ const AccountTable: React.FC = () => {
         <Space size="middle">
           <a
             onClick={() => {
-              setShowEditModal(true);
               setCurrentItem(item);
+              setShowEditModal(true);
             }}
             key="edit"
           >
@@ -167,9 +168,8 @@ const AccountTable: React.FC = () => {
             overlay={
               <Menu>
                 <Menu.Item key={0}>修改密码</Menu.Item>
-                <Menu.Item key={1}>所属门店</Menu.Item>
-                {item.type !== 1 ? null : (
-                  <Menu.Item key={2} onClick={() => removeFunc(item)}>
+                {item.type === 1 ? null : (
+                  <Menu.Item key={1} onClick={() => removeFunc(item)}>
                     删除账号
                   </Menu.Item>
                 )}
@@ -273,8 +273,13 @@ const AccountTable: React.FC = () => {
       <EditForm
         onSubmit={async (value) => {
           console.log('edit item values--->', value);
-          const success = await updateAccount(value);
-          if (success) {
+          let result;
+          if (value.id) {
+            result = await updateAccount({ data: { ...currentItem, ...value } });
+          } else {
+            result = await addAccount({ data: value });
+          }
+          if (result) {
             setShowEditModal(false);
             setCurrentItem(undefined);
             if (actionRef.current) {

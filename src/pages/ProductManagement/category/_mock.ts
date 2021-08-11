@@ -2,6 +2,7 @@ import type { Request, Response } from 'express';
 import dayjs from 'dayjs';
 import { parse } from 'url';
 import { parseInt } from 'lodash';
+import { create, remove, update, updateEnabled } from '../../../../mock/_common_mock';
 
 // mock tableListDataSource
 const genList = (current: number, pageSize: number) => {
@@ -106,25 +107,15 @@ export default {
   // GET POST 可省略
   'GET /api/category': findPage,
 
-  // 添加分类
-  'POST /api/category': (req: Request, res: Response) => {
-    const { image, name } = req.body;
-    const itemIdList: number[] = [];
-    tableListDataSource.forEach((item) => {
-      itemIdList.push(item.id);
-    });
-    const item = {
-      id: Math.max(...itemIdList) + 1,
-      image: image[0].thumbUrl,
-      name,
-      enabled: true,
-      createdAt: dayjs().valueOf(),
-    };
-    tableListDataSource.push(item);
-    res.send({ status: 'ok', success: true });
-  },
+  'POST /api/category': (req: Request, res: Response) =>
+    create<API.CategoryListItem>(req, res, tableListDataSource),
 
-  'PUT /api/category': (req: Request, res: Response) => {
-    res.send({ status: 'ok', success: true });
-  },
+  'PUT /api/category': (req: Request, res: Response) =>
+    update<API.CategoryListItem>(req, res, tableListDataSource),
+
+  'PUT /api/category/enabled': (req: Request, res: Response) =>
+    updateEnabled<API.CategoryListItem>(req, res, tableListDataSource),
+
+  'DELETE /api/category': (req: Request, res: Response) =>
+    remove<API.CategoryListItem>(req, res, tableListDataSource),
 };

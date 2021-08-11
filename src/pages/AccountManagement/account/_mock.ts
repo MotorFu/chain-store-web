@@ -6,6 +6,10 @@ import { parseInt } from 'lodash';
 import { Random, mock } from 'mockjs';
 import { AccountTypeEnum } from '../../../StoreConst';
 
+import { create, update, updateEnabled, remove } from '../../../../mock/_common_mock';
+
+import { tableListDataSource as StoreDataSource } from '../store/_mock';
+
 const AccountIcons: string[] = [
   'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
   'https://pic.feizl.com/upload2007/allimg/210227/13151924U-0.jpg',
@@ -55,6 +59,7 @@ const genList = (current: number, pageSize: number) => {
   for (let i = 0; i < pageSize; i += 1) {
     const index: number = (current - 1) * 10 + i;
 
+    const storeItem = StoreDataSource[Random.natural(0, StoreDataSource.length - 1)];
     tableListDataSource.push({
       id: index + 7,
       key: `${index + 7}`,
@@ -66,6 +71,10 @@ const genList = (current: number, pageSize: number) => {
       createdAt: dayjs()
         .add(-(pageSize - i), 'day')
         .valueOf(),
+      storeRelation: {
+        storeId: storeItem.id,
+        role: Random.natural(2, 3),
+      },
     });
   }
   tableListDataSource.reverse();
@@ -166,35 +175,19 @@ function findPage(req: Request, res: Response, u: string) {
   return res.json(result);
 }
 
-function updateEnabled(req: Request, res: Response) {
-  const { id, enabled } = req.body;
-  const item = tableListDataSource.filter((it) => it.id === id)[0];
-  item.enabled = !enabled;
-  res.send({ status: 'ok', success: true });
-}
-
-function remove(req: Request, res: Response) {
-  const items = req.body as API.AccountListItem[];
-  items.forEach((item) => {
-    const itemIndex = tableListDataSource.findIndex((it) => it.id === item.id);
-    tableListDataSource.splice(itemIndex, 1);
-  });
-  res.send({ status: 'ok', success: true });
-}
-
 export default {
   // GET POST 可省略
   'GET /api/account': findPage,
 
-  'POST /api/account': (req: Request, res: Response) => {
-    res.send({ status: 'ok', success: true });
-  },
+  'POST /api/account': (req: Request, res: Response) =>
+    create<API.AccountListItem>(req, res, tableListDataSource),
 
-  'PUT /api/account': (req: Request, res: Response) => {
-    res.send({ status: 'ok', success: true });
-  },
+  'PUT /api/account': (req: Request, res: Response) =>
+    update<API.AccountListItem>(req, res, tableListDataSource),
 
-  'PUT /api/account/enabled': updateEnabled,
+  'PUT /api/account/enabled': (req: Request, res: Response) =>
+    updateEnabled<API.AccountListItem>(req, res, tableListDataSource),
 
-  'DELETE /api/account': remove,
+  'DELETE /api/account': (req: Request, res: Response) =>
+    remove<API.AccountListItem>(req, res, tableListDataSource),
 };

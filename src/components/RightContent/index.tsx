@@ -54,9 +54,9 @@ const GlobalHeaderRight: React.FC = () => {
             value: '销售订单交易流水',
           },
         ]}
-        // onSearch={value => {
-        //   console.log('input', value);
-        // }}
+        onSearch={(value) => {
+          console.log('input', value);
+        }}
       />
       <span
         className={styles.action}

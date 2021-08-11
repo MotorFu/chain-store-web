@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Modal } from 'antd';
 import { ProFormSelect, ProFormText, ProFormUploadButton, StepsForm } from '@ant-design/pro-form';
+
+import { tableListDataSource } from '@/pages/AccountManagement/store/_mock';
 
 export type FormValueType = {
   target?: string;
@@ -16,8 +18,13 @@ export type UpdateFormProps = {
   visible: boolean;
   values: Partial<API.AccountListItem>;
 };
-
+const formItemLayout = {
+  labelCol: { span: 4 },
+  wrapperCol: { span: 16 },
+};
 const EditForm: React.FC<UpdateFormProps> = (props) => {
+  const [showStore, setShowStore] = useState(false);
+
   return (
     <StepsForm
       stepsProps={{
@@ -43,21 +50,26 @@ const EditForm: React.FC<UpdateFormProps> = (props) => {
       onFinish={props.onSubmit}
     >
       <StepsForm.StepForm
+        layout={'horizontal'}
+        {...formItemLayout}
         initialValues={{
+          id: props.values.id,
           username: props.values.username,
           phone: props.values.phone,
+          icon: props.values.icon ? [{ thumbUrl: props.values.icon }] : null,
         }}
         title="基本信息"
       >
+        <ProFormText name="id" width="md" label="手机号" placeholder="请输入手机号" hidden={true} />
         <ProFormUploadButton
           name="icon"
           label="头像"
           max={1}
-          initialValue={[{ thumbUrl: props.values.icon }]}
           fieldProps={{
             name: 'file',
             listType: 'picture-card',
           }}
+          transform={(value: any) => ({ icon: value[0].thumbUrl })}
           action="/upload.do"
           rules={[
             {
@@ -94,33 +106,73 @@ const EditForm: React.FC<UpdateFormProps> = (props) => {
         />
       </StepsForm.StepForm>
       <StepsForm.StepForm
+        layout={'horizontal'}
+        {...formItemLayout}
         initialValues={{
-          type: '0',
-          relation: {
-            storeId: 0,
-            storeName: '门店名称',
+          id: props.values.id,
+          type: props.values.type,
+          storeRelation: {
+            role: props.values.storeRelation?.role,
+            storeId: props.values.storeRelation?.storeId,
           },
         }}
         title="账号类型"
+        onValuesChange={(changeValues, values) => {
+          console.log('onValuesChange---->', changeValues, values);
+          setShowStore(values.type === 3);
+        }}
       >
+        <ProFormText name="id" width="md" label="手机号" placeholder="请输入手机号" hidden={true} />
         <ProFormSelect
           name="type"
           label="账号类型"
-          valueEnum={{
-            china: '系统管理员',
-            usa: '门店管理员',
-          }}
+          options={[
+            {
+              value: 2,
+              label: '系统管理员',
+            },
+            {
+              value: 3,
+              label: '门店管理员',
+            },
+          ]}
         />
-
-        <ProFormSelect
-          name="type"
-          label="门店角色"
-          valueEnum={{
-            superAdmin: '超级管理员',
-            normal: '普通管理员',
-            cashier: '收银员',
-          }}
-        />
+        {props.values.type === 3 || showStore
+          ? [
+              <ProFormSelect
+                key={'storeRelation.role'}
+                name={['storeRelation', 'role']}
+                label="门店角色"
+                options={[
+                  {
+                    value: 1,
+                    label: '超级管理员',
+                  },
+                  {
+                    value: 2,
+                    label: '普通管理员',
+                  },
+                  {
+                    value: 3,
+                    label: '收银员',
+                  },
+                ]}
+              />,
+              <ProFormSelect
+                key={'storeRelation.storeId'}
+                name={['storeRelation', 'storeId']}
+                label="门店"
+                request={async () => {
+                  return tableListDataSource.map((it) => {
+                    return {
+                      value: it.id,
+                      label: it.name,
+                    };
+                  });
+                }}
+              />,
+            ]
+          : null}
       </StepsForm.StepForm>
     </StepsForm>
   );

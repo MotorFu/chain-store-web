@@ -1,7 +1,6 @@
 import React, { useRef } from 'react';
 import type { FormInstance } from 'antd';
 import { ModalForm, ProFormText, ProFormUploadButton } from '@ant-design/pro-form';
-import { Button } from 'antd';
 
 // export type FormValueType =Partial<API.StoreListItem>;
 
@@ -27,7 +26,7 @@ const EditForm: React.FC<UpdateFormProps> = (props) => {
       visible={props.visible}
       formRef={formRef}
       modalProps={{
-        // destroyOnClose:true,
+        destroyOnClose: true,
         afterClose: () => {
           formRef.current?.resetFields();
         },
@@ -35,24 +34,18 @@ const EditForm: React.FC<UpdateFormProps> = (props) => {
           props.onCancel();
         },
       }}
-      submitter={{
-        render: ({ reset, submit }) => [
-          <Button key="cancel" onClick={() => props.onCancel()}>
-            取消
-          </Button>,
-          <Button key="reset" onClick={reset}>
-            重置
-          </Button>,
-          <Button key="submit" onClick={submit} type="primary">
-            提交
-          </Button>,
-        ],
+      initialValues={{
+        id: props.values.id,
+        image: props.values.image ? [{ thumbUrl: props.values.image }] : null,
+        name: props.values.name,
+        phone: props.values.phone,
+        address: props.values.address,
       }}
       onFinish={props.onSubmit}
     >
+      <ProFormText name="id" width="md" label="手机号" placeholder="请输入手机号" hidden={true} />
       <ProFormUploadButton
         name="image"
-        initialValue={[{ thumbUrl: props.values.image }]}
         label="图片"
         max={1}
         fieldProps={{
@@ -60,7 +53,7 @@ const EditForm: React.FC<UpdateFormProps> = (props) => {
           listType: 'picture-card',
         }}
         action="/upload.do"
-        extra=""
+        transform={(value: any) => ({ image: value[0].thumbUrl })}
         rules={[
           {
             required: true,
@@ -71,7 +64,6 @@ const EditForm: React.FC<UpdateFormProps> = (props) => {
       <ProFormText
         name="name"
         label="名称"
-        initialValue={props.values.name}
         rules={[
           {
             required: true,
@@ -82,7 +74,6 @@ const EditForm: React.FC<UpdateFormProps> = (props) => {
       <ProFormText
         name="phone"
         label="联系电话"
-        initialValue={props.values.phone}
         rules={[
           {
             required: true,
@@ -93,7 +84,6 @@ const EditForm: React.FC<UpdateFormProps> = (props) => {
       <ProFormText
         name="address"
         label="地址"
-        initialValue={props.values.address}
         rules={[
           {
             required: true,

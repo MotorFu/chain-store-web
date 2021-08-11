@@ -1,14 +1,15 @@
 import React, { useState, useRef } from 'react';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import ProTable, { ActionType, ProColumns } from '@ant-design/pro-table';
-import { Button, Dropdown, Menu, Space, Tag } from 'antd';
-import { PlusOutlined, RightOutlined } from '@ant-design/icons';
+import { Button, Modal, Space, Tag } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 
 import {
   findProduct,
   addProduct,
   removeProduct,
   updateProduct,
+  updateProductEnabled,
 } from '@/services/chain-store/ProductApi';
 import EditForm from './components/EditForm';
 import { PaginationConfig } from '@/StoreConst';
@@ -107,27 +108,49 @@ const AccountTable: React.FC = () => {
           >
             编辑
           </a>
-          <a key="enabled">{item.enabled ? '禁用' : '启用'}</a>
-          <Dropdown
-            key="more"
-            trigger={['click']}
-            overlay={
-              <Menu>
-                <Menu.Item key={0}>修改密码</Menu.Item>
-                <Menu.Item key={1}>所属门店</Menu.Item>
-                <Menu.Item key={2}>删除账号</Menu.Item>
-              </Menu>
-            }
-          >
-            <a>
-              更多
-              <RightOutlined />
-            </a>
-          </Dropdown>
+          <a key="enabled" onClick={() => updateEnabledFunc(item)}>
+            {item.enabled ? '禁用' : '启用'}
+          </a>
+          <a key="delete" onClick={() => removeFunc(item)}>
+            删除
+          </a>
         </Space>
       ),
     },
   ];
+
+  function updateEnabledFunc(item: API.ProductListItem) {
+    Modal.confirm({
+      title: '提示',
+      content: <div>确定要{item.enabled ? '禁用' : '开启'}商品？</div>,
+      onOk: async () => {
+        const success = await updateProductEnabled({ data: item });
+        if (success) {
+          if (actionRef.current) {
+            actionRef.current.reload();
+          }
+        }
+      },
+    });
+  }
+
+  function removeFunc(item: API.ProductListItem) {
+    Modal.confirm({
+      title: '提示',
+      content: <div>确定要删除【{item.name}】商品？</div>,
+      onOk: async () => {
+        const success = await removeProduct({
+          data: [item],
+        });
+        if (success) {
+          if (actionRef.current) {
+            actionRef.current.reload();
+          }
+        }
+      },
+    });
+  }
+
   return (
     <PageContainer>
       <ProTable<API.ProductListItem, API.PageParams>
@@ -171,7 +194,7 @@ const AccountTable: React.FC = () => {
           <Button
             onClick={async () => {
               console.log('selectedRowsState--->', selectedRowsState);
-              await removeProduct(selectedRowsState);
+              await removeProduct({ data: selectedRowsState });
               setSelectedRows([]);
               actionRef.current?.reloadAndRest?.();
             }}
@@ -184,9 +207,9 @@ const AccountTable: React.FC = () => {
         onSubmit={async (value) => {
           let success;
           if (value.id != null) {
-            success = await updateProduct(value);
+            success = await updateProduct({ data: { ...currentItem, ...value } });
           } else {
-            success = await addProduct(value);
+            success = await addProduct({ data: value });
           }
 
           if (success) {

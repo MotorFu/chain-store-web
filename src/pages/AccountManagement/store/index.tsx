@@ -121,7 +121,7 @@ const StoreTable: React.FC = () => {
       title: '提示',
       content: <div>确定要{item.enabled ? '禁用' : '开启'}门店？</div>,
       onOk: async () => {
-        const success = await updateStoreEnabled(item);
+        const success = await updateStoreEnabled({ data: item });
         if (success) {
           if (actionRef.current) {
             actionRef.current.reload();
@@ -204,9 +204,9 @@ const StoreTable: React.FC = () => {
         onSubmit={async (value) => {
           let success;
           if (value.id != null) {
-            success = await updateStore(value);
+            success = await updateStore({ data: { ...currentItem, ...value } });
           } else {
-            success = await addStore(value);
+            success = await addStore({ data: value });
           }
 
           if (success) {
