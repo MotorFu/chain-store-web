@@ -1,13 +1,13 @@
 import React from 'react';
 import { Row, Col } from 'antd';
-import './Welcome.less';
+import styles from './Welcome.less';
 
 export default (): React.ReactNode => {
   return (
-    <Row className="title-box">
-      <Col span={24} className="title-content">
+    <Row className={styles.titleBox}>
+      <Col span={24} className={styles.titleContent}>
         <div>
-          <img alt="logo" className="title-logo" src="logo.svg" />
+          <img alt="logo" className={styles.titleLogo} src="logo.svg" />
         </div>
         欢迎使用连锁商店管理系统
       </Col>
