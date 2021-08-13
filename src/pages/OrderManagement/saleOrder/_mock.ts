@@ -2,30 +2,40 @@ import type { Request, Response } from 'express';
 import dayjs from 'dayjs';
 import { parse } from 'url';
 import { parseInt } from 'lodash';
-// import {tableListDataSource as AccountDataSource} from "@/pages/AccountManagement/account/_mock";
-
-export const PayTypes: number[] = [1, 2, 3];
+import { tableListDataSource as StoreDataSource } from '../../AccountManagement/store/_mock';
+import { tableListDataSource as AccountDataSource } from '../../AccountManagement/account/_mock';
+import { OrderPayTypeOptions } from '../../../StoreConst';
+import { Random } from 'mockjs';
 
 // mock tableListDataSource
 const genList = (current: number, pageSize: number) => {
   console.log('saleOrder init data');
   const tableListDataSource: API.SaleOrderListItem[] = [];
 
+  const CashierDataSource = AccountDataSource.filter(
+    (it) => it.type === 3 && it.storeRelation?.role === 3,
+  );
   for (let i = 0; i < pageSize; i += 1) {
     const index: number = (current - 1) * 10 + i;
 
+    let storeItem: API.StoreListItem = { id: 0, name: '', createdAt: 0 };
+    const cashierItem = CashierDataSource[Random.natural(0, CashierDataSource.length - 1)];
+
+    StoreDataSource.forEach((store) => {
+      if (store.id === cashierItem.storeRelation?.storeId) {
+        storeItem = store;
+      }
+    });
     tableListDataSource.push({
       id: index + 1,
       key: `${index + 1}`,
-      storeId: index + 1,
-      storeName: `店名_${index + 1}`,
-      orderNo: dayjs()
-        .add(-(pageSize - i), 'day')
-        .format('YYYYMMDDHHmmss'),
+      storeId: storeItem.id,
+      storeName: storeItem.name,
+      orderNo: Random.datetime('yyyyMMddHHmmss') + Random.natural(100000, 999999),
       totalPrice: 10,
-      accountId: 1,
-      accountName: `收银员_${(index % 3) + 1}`,
-      payType: PayTypes[Math.ceil(Math.random() * 2) + 1],
+      accountId: cashierItem.id,
+      accountName: cashierItem.username,
+      payType: OrderPayTypeOptions[Random.natural(1, 3)].value,
       payTime: dayjs()
         .add(-(pageSize - i), 'day')
         .add(50, 'second')

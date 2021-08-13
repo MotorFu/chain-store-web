@@ -5,7 +5,7 @@ import { Button, Drawer, Space } from 'antd';
 
 import { findSaleOrder, removeSaleOrder } from '@/services/chain-store/SaleOrderApi';
 import ProDescriptions, { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
-import { PaginationConfig } from '@/StoreConst';
+import { OrderPayTypeOptions, PaginationConfig } from '@/StoreConst';
 
 const SaleOrderTable: React.FC = () => {
   const [showViewDrawer, setShowViewDrawer] = useState(false);
@@ -47,6 +47,12 @@ const SaleOrderTable: React.FC = () => {
       title: '支付类型',
       key: 'payType',
       dataIndex: 'payType',
+      render: (_, item) => {
+        if (item.payType) {
+          return OrderPayTypeOptions[item.payType].label;
+        }
+        return '未知';
+      },
     },
     {
       title: '支付时间',

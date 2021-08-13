@@ -3,7 +3,9 @@ import dayjs from 'dayjs';
 import { parse } from 'url';
 import { parseInt } from 'lodash';
 import { create, remove, update, updateEnabled } from '../../../../mock/_common_mock';
+import mockjs from 'mockjs';
 
+const { Random } = mockjs;
 // mock tableListDataSource
 const genList = (current: number, pageSize: number) => {
   console.log('store init data');
@@ -15,14 +17,14 @@ const genList = (current: number, pageSize: number) => {
     tableListDataSource.push({
       id: index + 1,
       key: `${index + 1}`,
-      name: `分类_ ${index}`,
-      enabled: i % 4 !== 0,
+      name: `分类_ ${Random.ctitle()}`,
+      enabled: Random.boolean(),
       createdAt: dayjs()
         .add(-(pageSize - i), 'day')
         .valueOf(),
     });
   }
-  tableListDataSource.reverse();
+  // tableListDataSource.reverse();
   return tableListDataSource;
 };
 // 源数据

@@ -2,6 +2,8 @@
 /* eslint-disable */
 
 declare namespace API {
+  type AccountRole = 1 | 2 | 3; // super admin| normal admin | cashier
+
   type PageParams = {
     current?: number;
     pageSize?: number;
@@ -17,7 +19,7 @@ declare namespace API {
 
   type BaseItem = {
     id: number;
-    key: string;
+    key?: string;
     enabled?: boolean;
     createdAt: number;
     createdBy?: number;
@@ -33,7 +35,7 @@ declare namespace API {
     type: number;
     storeRelation?: {
       storeId: number;
-      role: number;
+      role: AccountRole;
     };
   } & BaseItem;
 
@@ -50,8 +52,6 @@ declare namespace API {
     phone?: string;
     address?: string;
   } & BaseItem;
-
-  type AccountRole = 1 | 2; // admin | cashier
 
   type AccountStoreRelationList = {
     data?: AccountStoreRelationItem[];
@@ -74,6 +74,7 @@ declare namespace API {
     icon?: string;
     phone?: string;
     access?: string;
+    unreadCount?: number;
   };
 
   type LoginResult = {

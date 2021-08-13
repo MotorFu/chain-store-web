@@ -16,6 +16,31 @@ export enum StoreRoleEnum {
   CASHIER = 3, // 门店收银员
 }
 
+export enum OrderPayTypeEnum {
+  CASH = 1,
+  ALIPAY = 2,
+  WECHAT = 3,
+}
+
+export const OrderPayTypeOptions = [
+  {
+    value: 0,
+    label: '不限',
+  },
+  {
+    value: 1,
+    label: '现金',
+  },
+  {
+    value: 2,
+    label: '支付宝',
+  },
+  {
+    value: 3,
+    label: '微信',
+  },
+];
+
 // export default {
 //   AccountTypeEnum,
 //   StoreRoleEnum

@@ -24,7 +24,7 @@ const AccountTable: React.FC = () => {
 
   const columns: ProColumns<API.ProductListItem>[] = [
     {
-      title: '门店ID',
+      title: 'ID',
       key: 'id',
       dataIndex: 'id',
       sorter: true,
@@ -38,7 +38,7 @@ const AccountTable: React.FC = () => {
       hideInSearch: true,
     },
     {
-      title: '店名',
+      title: '名称',
       key: 'name',
       dataIndex: 'name',
     },
@@ -52,6 +52,7 @@ const AccountTable: React.FC = () => {
       key: 'unit',
       dataIndex: 'unit',
       width: 80,
+      hideInSearch: true,
     },
     {
       title: '状态',

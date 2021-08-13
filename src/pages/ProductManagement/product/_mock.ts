@@ -32,19 +32,19 @@ const genList = (current: number, pageSize: number) => {
     tableListDataSource.push({
       id: index + 1,
       key: `${index + 1}`,
-      name: `店名_ ${mockjs.mock('@ctitle()')}`,
+      name: `商品_ ${mockjs.mock('@ctitle()')}`,
       image: ProductImages[Random.natural(0, ProductImages.length)],
       description: `商品描述_${mockjs.mock('@cparagraph(1, 3)')}`,
       unit: '件',
       originalPrice: mockjs.mock('@natural(10000,20000)'),
       retailPrice: mockjs.mock('@natural(20000,30000)'),
-      enabled: i % 4 !== 0,
+      enabled: Random.boolean(),
       createdAt: dayjs()
         .add(-(pageSize - i), 'day')
         .valueOf(),
     });
   }
-  tableListDataSource.reverse();
+  // tableListDataSource.reverse();
   return tableListDataSource;
 };
 // 源数据

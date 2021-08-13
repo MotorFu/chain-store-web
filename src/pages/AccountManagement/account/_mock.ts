@@ -77,7 +77,7 @@ const genList = (current: number, pageSize: number) => {
       },
     });
   }
-  tableListDataSource.reverse();
+  // tableListDataSource.reverse();
   return tableListDataSource;
 };
 // 源数据
