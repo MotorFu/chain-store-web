@@ -9,4 +9,4 @@ REMOTE_DIR="${server_host}:${server_dir}/"
 #scp -r ./dist/** ${REMOTE_DIR}
 
 
-ssh -t -t ${server_host} "cd ${server_dir}; ./run.sh"
+ssh -t -t ${server_host} "cd ${server_dir}; ./run.sh $1"
