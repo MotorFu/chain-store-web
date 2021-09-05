@@ -39,7 +39,7 @@ const SaleOrderTable: React.FC = () => {
     },
 
     {
-      title: '收银名',
+      title: '收银员名称',
       key: 'accountName',
       dataIndex: 'accountName',
     },

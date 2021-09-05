@@ -31,10 +31,12 @@ export function remove<T extends API.BaseItem>(
 ) {
   const items = req.body as T[];
   console.log('mock update', items);
-  items.forEach((item) => {
-    const itemIndex = tableListDataSource.findIndex((it) => it.id === item.id);
-    tableListDataSource.splice(itemIndex, 1);
-  });
+  if (items.length > 0) {
+    items.forEach((item) => {
+      const itemIndex = tableListDataSource.findIndex((it) => it.id === item.id);
+      tableListDataSource.splice(itemIndex, 1);
+    });
+  }
   res.send({ status: 'ok', success: true });
 }
 

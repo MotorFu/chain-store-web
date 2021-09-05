@@ -92,6 +92,33 @@ const AccountTable: React.FC = () => {
       },
     },
     {
+      title: '门店名称',
+      key: 'storeRelation.storeName',
+      dataIndex: 'storeRelation.storeName',
+      hideInSearch: true,
+      render: (_, item) => {
+        return item.storeRelation ? item.storeRelation.storeName : '-';
+      },
+    },
+    {
+      title: '门店角色',
+      key: 'storeRelation.role',
+      dataIndex: 'storeRelation.role',
+      hideInSearch: true,
+      render: (_, item) => {
+        switch (item.storeRelation?.role) {
+          case 1:
+            return '门店超级管理员';
+          case 2:
+            return '门店普通管理员';
+          case 3:
+            return '门店收银员';
+          default:
+            return '-';
+        }
+      },
+    },
+    {
       title: '账号状态',
       key: 'enabled',
       dataIndex: 'enabled',

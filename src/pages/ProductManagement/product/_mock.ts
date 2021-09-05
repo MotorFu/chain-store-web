@@ -24,7 +24,7 @@ const ProductImages: string[] = [
   'https://img11.360buyimg.com/babel/s300x300_jfs/t1/143478/17/17954/187091/5fd321b5E2aa90966/ada39cec7bf7827b.jpg.webp',
 ];
 const genList = (current: number, pageSize: number) => {
-  console.log('store init data');
+  console.log('product init data');
   const tableListDataSource: API.ProductListItem[] = [];
 
   for (let i = 0; i < pageSize; i += 1) {

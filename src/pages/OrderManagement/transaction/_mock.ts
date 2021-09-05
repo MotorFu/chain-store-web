@@ -8,7 +8,7 @@ export const PayTypes: number[] = [1, 2, 3];
 
 // mock tableListDataSource
 const genList = (current: number, pageSize: number) => {
-  console.log('saleOrder init data');
+  console.log('saleOrder transaction init data');
   const tableListDataSource: API.SaleOrderTransactionListItem[] = [];
 
   for (let i = 0; i < pageSize; i += 1) {

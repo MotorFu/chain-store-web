@@ -4,6 +4,11 @@
 declare namespace API {
   type AccountRole = 1 | 2 | 3; // super admin| normal admin | cashier
 
+  type SelectOption = {
+    label: string;
+    value: string | number;
+  };
+
   type PageParams = {
     current?: number;
     pageSize?: number;
@@ -35,6 +40,7 @@ declare namespace API {
     type: number;
     storeRelation?: {
       storeId: number;
+      storeName?: string;
       role: AccountRole;
     };
   } & BaseItem;
@@ -111,7 +117,10 @@ declare namespace API {
   };
 
   type CategoryListItem = {
+    level: number;
+    parentId: number;
     name: string;
+    children: API.CategoryListItem[];
   } & BaseItem;
 
   type SaleOrderList = {

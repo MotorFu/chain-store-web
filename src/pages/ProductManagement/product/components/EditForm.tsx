@@ -22,7 +22,7 @@ const EditForm: React.FC<UpdateFormProps> = (props) => {
     <ModalForm<API.ProductListItem>
       layout="horizontal"
       {...formItemLayout}
-      title={props.values.id == null ? '添加门店' : '修改门店'}
+      title={props.values.id == null ? '添加商品' : '修改商品'}
       visible={props.visible}
       formRef={formRef}
       modalProps={{

@@ -30,9 +30,10 @@ const genList = (current: number, pageSize: number) => {
   console.log('account init data');
   const tableListDataSource: API.AccountListItem[] = [];
 
+  const sId = Random.increment();
   tableListDataSource.push({
-    id: 1,
-    key: '1',
+    id: sId,
+    key: `${sId}`,
     username: `superAdmin`,
     icon: AccountIcons[0],
     phone: '18616352386',
@@ -41,10 +42,11 @@ const genList = (current: number, pageSize: number) => {
     createdAt: dayjs().valueOf(),
   });
 
-  for (let i = 0; i < 5; i += 1) {
+  for (let i = 0; i < 3; i += 1) {
+    const nId = Random.increment();
     tableListDataSource.push({
-      id: i + 2,
-      key: `${i + 2}`,
+      id: nId,
+      key: `${nId}`,
       username: `admin_ ${Random.word(5, 10)}`,
       icon: AccountIcons[Random.natural(0, AccountIcons.length - 1)],
       phone: mock(/^1[3456789]\d{9}$/),
@@ -56,27 +58,84 @@ const genList = (current: number, pageSize: number) => {
     });
   }
 
-  for (let i = 0; i < pageSize; i += 1) {
-    const index: number = (current - 1) * 10 + i;
+  // 每个店铺至少一个店铺管理员，收银员
 
-    const storeItem = StoreDataSource[Random.natural(0, StoreDataSource.length - 1)];
+  StoreDataSource.forEach((store) => {
+    const ssId = Random.increment();
+    // 店铺超级管理员
     tableListDataSource.push({
-      id: index + 7,
-      key: `${index + 7}`,
+      id: ssId,
+      key: `${ssId}`,
       username: `store_ ${Random.word(5, 10)}`,
       icon: AccountIcons[Random.natural(0, AccountIcons.length - 1)],
       phone: mock(/^1[3456789]\d{9}$/),
-      enabled: Random.boolean(5, pageSize, false),
+      enabled: true,
       type: AccountTypeEnum.STORE_ADMIN.valueOf(),
-      createdAt: dayjs()
-        .add(-(pageSize - i), 'day')
-        .valueOf(),
+      createdAt: dayjs().valueOf(),
       storeRelation: {
-        storeId: storeItem.id,
-        role: Random.natural(2, 3),
+        storeId: store.id,
+        storeName: store.name,
+        role: 1,
       },
     });
-  }
+    const snId = Random.increment();
+    // 店铺普通管理员
+    tableListDataSource.push({
+      id: snId,
+      key: `${snId}`,
+      username: `store_ ${Random.word(5, 10)}`,
+      icon: AccountIcons[Random.natural(0, AccountIcons.length - 1)],
+      phone: mock(/^1[3456789]\d{9}$/),
+      enabled: true,
+      type: AccountTypeEnum.STORE_ADMIN.valueOf(),
+      createdAt: dayjs().valueOf(),
+      storeRelation: {
+        storeId: store.id,
+        storeName: store.name,
+        role: 2,
+      },
+    });
+
+    const scId = Random.increment();
+    // 店铺收银员
+    tableListDataSource.push({
+      id: scId,
+      key: `${scId}`,
+      username: `store_ ${Random.word(5, 10)}`,
+      icon: AccountIcons[Random.natural(0, AccountIcons.length - 1)],
+      phone: mock(/^1[3456789]\d{9}$/),
+      enabled: true,
+      type: AccountTypeEnum.STORE_ADMIN.valueOf(),
+      createdAt: dayjs().valueOf(),
+      storeRelation: {
+        storeId: store.id,
+        storeName: store.name,
+        role: 3,
+      },
+    });
+  });
+
+  // for (let i = 0; i < pageSize; i += 1) {
+  //   const index: number = (current - 1) * 10 + i;
+  //
+  //   const storeItem = StoreDataSource[Random.natural(0, StoreDataSource.length - 1)];
+  //   tableListDataSource.push({
+  //     id: index + 7,
+  //     key: `${index + 7}`,
+  //     username: `store_ ${Random.word(5, 10)}`,
+  //     icon: AccountIcons[Random.natural(0, AccountIcons.length - 1)],
+  //     phone: mock(/^1[3456789]\d{9}$/),
+  //     enabled: Random.boolean(5, pageSize, false),
+  //     type: AccountTypeEnum.STORE_ADMIN.valueOf(),
+  //     createdAt: dayjs()
+  //       .add(-(pageSize - i), 'day')
+  //       .valueOf(),
+  //     storeRelation: {
+  //       storeId: storeItem.id,
+  //       role: Random.natural(2, 3),
+  //     },
+  //   });
+  // }
   // tableListDataSource.reverse();
   return tableListDataSource;
 };

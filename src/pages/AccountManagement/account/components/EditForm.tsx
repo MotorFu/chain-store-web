@@ -126,16 +126,26 @@ const EditForm: React.FC<UpdateFormProps> = (props) => {
         <ProFormSelect
           name="type"
           label="账号类型"
-          options={[
-            {
-              value: 2,
-              label: '系统管理员',
-            },
-            {
-              value: 3,
-              label: '门店管理员',
-            },
-          ]}
+          disabled={props.values.type === 1}
+          options={
+            props.values.type === 1
+              ? [
+                  {
+                    value: 1,
+                    label: '超级系统管理员',
+                  },
+                ]
+              : [
+                  {
+                    value: 2,
+                    label: '系统管理员',
+                  },
+                  {
+                    value: 3,
+                    label: '门店管理员',
+                  },
+                ]
+          }
         />
         {props.values.type === 3 || showStore
           ? [

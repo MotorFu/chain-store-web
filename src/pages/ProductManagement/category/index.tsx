@@ -24,7 +24,7 @@ const AccountTable: React.FC = () => {
 
   const columns: ProColumns<API.CategoryListItem>[] = [
     {
-      title: '门店ID',
+      title: 'ID',
       key: 'id',
       dataIndex: 'id',
       sorter: true,
@@ -79,7 +79,8 @@ const AccountTable: React.FC = () => {
       render: (_, item) => (
         <Space size="middle">
           <a
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               setCurrentItem(item);
               setShowEditModal(true);
             }}
@@ -87,10 +88,22 @@ const AccountTable: React.FC = () => {
           >
             编辑
           </a>
-          <a key="enabled" onClick={() => updateEnabledFunc(item)}>
+          <a
+            key="enabled"
+            onClick={(e) => {
+              e.stopPropagation();
+              updateEnabledFunc(item);
+            }}
+          >
             {item.enabled ? '禁用' : '启用'}
           </a>
-          <a key="detele" onClick={() => removeFunc(item)}>
+          <a
+            key="delete"
+            onClick={(e) => {
+              e.stopPropagation();
+              removeFunc(item);
+            }}
+          >
             删除
           </a>
         </Space>
@@ -133,6 +146,10 @@ const AccountTable: React.FC = () => {
   return (
     <PageContainer>
       <ProTable<API.CategoryListItem, API.PageParams>
+        expandable={{
+          expandRowByClick: true,
+          defaultExpandAllRows: true,
+        }}
         pagination={PaginationConfig}
         headerTitle={'headerTitle'}
         actionRef={actionRef}
@@ -173,7 +190,7 @@ const AccountTable: React.FC = () => {
           <Button
             onClick={async () => {
               console.log('selectedRowsState--->', selectedRowsState);
-              await removeCategory(selectedRowsState);
+              await removeCategory({ data: selectedRowsState });
               setSelectedRows([]);
               actionRef.current?.reloadAndRest?.();
             }}
@@ -182,30 +199,33 @@ const AccountTable: React.FC = () => {
           </Button>
         </FooterToolbar>
       )}
-      <EditForm
-        onSubmit={async (value) => {
-          let success;
-          if (value.id != null) {
-            success = await updateCategory(value);
-          } else {
-            success = await addCategory(value);
-          }
+      {showEditModal ? (
+        <EditForm
+          onSubmit={async (value) => {
+            console.log('edit form value=====>', value);
+            let success;
+            if (value.id != null) {
+              success = await updateCategory({ data: value });
+            } else {
+              success = await addCategory({ data: value });
+            }
 
-          if (success) {
+            if (success) {
+              setCurrentItem(undefined);
+              setShowEditModal(false);
+              if (actionRef.current) {
+                actionRef.current.reload();
+              }
+            }
+          }}
+          onCancel={() => {
             setCurrentItem(undefined);
             setShowEditModal(false);
-            if (actionRef.current) {
-              actionRef.current.reload();
-            }
-          }
-        }}
-        onCancel={() => {
-          setCurrentItem(undefined);
-          setShowEditModal(false);
-        }}
-        visible={showEditModal}
-        values={currentItem || {}}
-      />
+          }}
+          visible={showEditModal}
+          values={currentItem || {}}
+        />
+      ) : null}
     </PageContainer>
   );
 };

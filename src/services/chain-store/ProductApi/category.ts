@@ -23,6 +23,13 @@ export async function findCategory(
   });
 }
 
+export async function findFirstCategoryList(options?: { [key: string]: any }) {
+  return request<Record<string, any>>('/api/category/first', {
+    method: 'GET',
+    ...(options || {}),
+  });
+}
+
 export async function updateCategory(options?: { [key: string]: any }) {
   console.log('options', options);
   return request<API.CategoryListItem>('/api/category', {
