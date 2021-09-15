@@ -20,7 +20,7 @@ const genList = (current: number, pageSize: number) => {
     tableListDataSource.push({
       id: index + 1,
       key: `${index + 1}`,
-      name: `${mock('@ctitle(3,7)')}`,
+      name: `门店-${mock('@ctitle(3,7)')}`,
       image: StoreImages[Random.natural(0, StoreImages.length - 1)],
       phone: `${16688000000 + i}`,
       address: mock('@county(true)'),

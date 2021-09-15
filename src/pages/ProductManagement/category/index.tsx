@@ -151,7 +151,7 @@ const AccountTable: React.FC = () => {
           defaultExpandAllRows: true,
         }}
         pagination={PaginationConfig}
-        headerTitle={'headerTitle'}
+        headerTitle={''}
         actionRef={actionRef}
         rowKey="key"
         search={{

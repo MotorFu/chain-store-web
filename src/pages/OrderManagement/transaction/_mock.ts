@@ -1,49 +1,38 @@
 import type { Request, Response } from 'express';
-import dayjs from 'dayjs';
 import { parse } from 'url';
 import { parseInt } from 'lodash';
-// import { PayTypes } from '@/services/SysConst';
 
-export const PayTypes: number[] = [1, 2, 3];
+import { tableListDataSource as SaleOrderDataSource } from '../../OrderManagement/saleOrder/_mock';
 
 // mock tableListDataSource
-const genList = (current: number, pageSize: number) => {
+const genList = () => {
   console.log('saleOrder transaction init data');
   const tableListDataSource: API.SaleOrderTransactionListItem[] = [];
 
-  for (let i = 0; i < pageSize; i += 1) {
-    const index: number = (current - 1) * 10 + i;
-
+  for (let i = 0; i < SaleOrderDataSource.length; i += 1) {
+    const saleOrderItem = SaleOrderDataSource[i];
     tableListDataSource.push({
-      id: index + 1,
-      key: `${index + 1}`,
-      storeId: index + 1,
-      storeName: `店名_${index + 1}`,
-      storeOrderId: index + 1,
-      storeOrderNo: dayjs()
-        .add(-(pageSize - i), 'day')
-        .format('YYYYMMDDHHmmss'),
-      transactionNo: dayjs()
-        .add(-(pageSize - i), 'day')
-        .format('YYYYMMDDHHmmss'),
-      accountId: 1,
-      accountName: `收银员_${(index % 3) + 1}`,
-      payType: PayTypes[Math.ceil(Math.random() * 2) + 1],
-      payAmount: 10,
-      payTime: dayjs()
-        .add(-(pageSize - i), 'day')
-        .add(10, 'second')
-        .valueOf(),
-      createdAt: dayjs()
-        .add(-(pageSize - i), 'day')
-        .valueOf(),
+      id: saleOrderItem.id,
+      key: `${saleOrderItem.key}`,
+      storeOrderId: saleOrderItem.id,
+      storeOrderNo: saleOrderItem.orderNo,
+      transactionNo: saleOrderItem.orderNo,
+      storeId: saleOrderItem.storeId,
+      storeName: saleOrderItem.storeName,
+      accountId: saleOrderItem.accountId,
+      accountName: saleOrderItem.accountName,
+      payType: saleOrderItem.payType,
+      payAmount: saleOrderItem.totalPrice,
+      payTime: saleOrderItem.payTime,
+      createdAt: saleOrderItem.payTime,
     });
   }
+
   tableListDataSource.reverse();
   return tableListDataSource;
 };
 // 源数据
-const tableListDataSource = genList(1, 100);
+const tableListDataSource = genList();
 
 /**
  * 拷贝数据

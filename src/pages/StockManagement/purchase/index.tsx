@@ -62,9 +62,12 @@ const SaleOrderTable: React.FC = () => {
               setCurrentItem(item);
               setShowViewDrawer(true);
             }}
-            key="edit"
+            key="view"
           >
             查看
+          </a>
+          <a onClick={() => {}} key="edit">
+            编辑
           </a>
         </Space>
       ),
@@ -74,7 +77,7 @@ const SaleOrderTable: React.FC = () => {
     <PageContainer>
       <ProTable<API.StorePurchaseOrderListItem, API.PageParams>
         pagination={PaginationConfig}
-        headerTitle={'headerTitle'}
+        headerTitle={''}
         actionRef={actionRef}
         rowKey="key"
         search={{

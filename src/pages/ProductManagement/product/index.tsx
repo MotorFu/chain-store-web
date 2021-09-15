@@ -156,7 +156,7 @@ const AccountTable: React.FC = () => {
     <PageContainer>
       <ProTable<API.ProductListItem, API.PageParams>
         pagination={PaginationConfig}
-        headerTitle={'headerTitle'}
+        headerTitle={''}
         actionRef={actionRef}
         rowKey="key"
         search={{

@@ -17,7 +17,7 @@ const SaleOrderTable: React.FC = () => {
 
   const columns: ProColumns<API.SaleOrderListItem>[] = [
     {
-      title: '订单ID',
+      title: 'ID',
       key: 'id',
       dataIndex: 'id',
       sorter: true,
@@ -36,6 +36,9 @@ const SaleOrderTable: React.FC = () => {
       title: '总售价',
       key: 'totalPrice',
       dataIndex: 'totalPrice',
+      render: (_, item) => {
+        return (item.totalPrice / 100).toFixed(2);
+      },
     },
 
     {
@@ -74,6 +77,7 @@ const SaleOrderTable: React.FC = () => {
       dataIndex: 'option',
       hideInSearch: true,
       hideInDescriptions: true,
+      width: 80,
       render: (_, item) => (
         <Space size="middle">
           <a
@@ -93,7 +97,7 @@ const SaleOrderTable: React.FC = () => {
     <PageContainer>
       <ProTable<API.SaleOrderListItem, API.PageParams>
         pagination={PaginationConfig}
-        headerTitle={'headerTitle'}
+        headerTitle={''}
         actionRef={actionRef}
         rowKey="key"
         search={{

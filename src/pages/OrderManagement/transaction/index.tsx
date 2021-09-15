@@ -5,7 +5,7 @@ import { Drawer, Space } from 'antd';
 
 import { findSaleOrderTransaction } from '@/services/chain-store/SaleOrderApi/saleOrderTransaction';
 import ProDescriptions, { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
-import { PaginationConfig } from '@/StoreConst';
+import { OrderPayTypeOptions, PaginationConfig } from '@/StoreConst';
 
 const SaleOrderTable: React.FC = () => {
   const [showViewDrawer, setShowViewDrawer] = useState(false);
@@ -15,15 +15,40 @@ const SaleOrderTable: React.FC = () => {
 
   const columns: ProColumns<API.SaleOrderTransactionListItem>[] = [
     {
-      title: '订单ID',
+      title: 'ID',
       key: 'id',
       dataIndex: 'id',
       sorter: true,
     },
     {
-      title: '订单号',
-      key: 'storeOrderNo',
-      dataIndex: 'storeOrderNo',
+      title: '交易流水号',
+      key: 'transactionNo',
+      dataIndex: 'transactionNo',
+    },
+    {
+      title: '支付类型',
+      key: 'payType',
+      dataIndex: 'payType',
+      render: (_, item) => {
+        if (item.payType) {
+          return OrderPayTypeOptions[item.payType].label;
+        }
+        return '未知';
+      },
+    },
+    {
+      title: '支付金额',
+      key: 'payAmount',
+      dataIndex: 'payAmount',
+      render: (_, item) => {
+        return (item.payAmount / 100).toFixed(2);
+      },
+    },
+    {
+      title: '支付时间',
+      key: 'payTime',
+      dataIndex: 'payTime',
+      valueType: 'dateTime',
     },
     {
       title: '门店',
@@ -34,22 +59,6 @@ const SaleOrderTable: React.FC = () => {
       title: '收银员名称',
       key: 'accountName',
       dataIndex: 'accountName',
-    },
-    {
-      title: '支付金额',
-      key: 'payAmount',
-      dataIndex: 'payAmount',
-    },
-    {
-      title: '支付类型',
-      key: 'payType',
-      dataIndex: 'payType',
-    },
-    {
-      title: '支付时间',
-      key: 'payTime',
-      dataIndex: 'payTime',
-      valueType: 'dateTime',
     },
     {
       title: '创建时间',
@@ -84,7 +93,7 @@ const SaleOrderTable: React.FC = () => {
     <PageContainer>
       <ProTable<API.SaleOrderTransactionListItem, API.PageParams>
         pagination={PaginationConfig}
-        headerTitle={'headerTitle'}
+        headerTitle={''}
         actionRef={actionRef}
         rowKey="key"
         search={{

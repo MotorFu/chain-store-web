@@ -32,7 +32,7 @@ const genList = (current: number, pageSize: number) => {
       storeId: storeItem.id,
       storeName: storeItem.name,
       orderNo: Random.datetime('yyyyMMddHHmmss') + Random.natural(100000, 999999),
-      totalPrice: 10,
+      totalPrice: Random.natural(100, 50000),
       accountId: cashierItem.id,
       accountName: cashierItem.username,
       payType: OrderPayTypeOptions[Random.natural(1, 3)].value,
@@ -50,7 +50,7 @@ const genList = (current: number, pageSize: number) => {
 };
 
 // 源数据
-const tableListDataSource = genList(1, 100);
+export const tableListDataSource = genList(1, 100);
 
 /**
  * 拷贝数据

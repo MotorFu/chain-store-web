@@ -48,7 +48,7 @@ const genList = (current: number, pageSize: number) => {
   return tableListDataSource;
 };
 // 源数据
-const tableListDataSource = genList(1, 15);
+export const tableListDataSource = genList(1, 15);
 
 /**
  * 拷贝数据

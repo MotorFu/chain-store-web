@@ -140,8 +140,8 @@ declare namespace API {
     accountId: number;
     accountName: string;
     createdAt?: number;
-    payTime?: number;
-    payType?: number;
+    payTime: number;
+    payType: number;
     SaleOrderItem?: [];
   };
 
@@ -195,9 +195,7 @@ declare namespace API {
     storeId: number;
     storeName: string;
     productId: number;
-    storeProductId: number;
-    storeProductSkuInfo: string;
-    price: number;
+    productName: string;
     stock: number;
     createdAt?: number;
   };

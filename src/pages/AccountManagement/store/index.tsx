@@ -152,7 +152,7 @@ const StoreTable: React.FC = () => {
     <PageContainer>
       <ProTable<API.StoreListItem, API.PageParams>
         pagination={PaginationConfig}
-        headerTitle={'headerTitle'}
+        headerTitle={''}
         actionRef={actionRef}
         rowKey="key"
         search={{

@@ -2,32 +2,35 @@ import type { Request, Response } from 'express';
 import dayjs from 'dayjs';
 import { parse } from 'url';
 import { parseInt } from 'lodash';
+import { Random } from 'mockjs';
+import { tableListDataSource as StoreDataSource } from '../../AccountManagement/store/_mock';
+import { tableListDataSource as AccountDataSource } from '../../AccountManagement/account/_mock';
+
+import { tableListDataSource as ProductDataSource } from '../../ProductManagement/product/_mock';
+
 // import { PayTypes } from '@/services/SysConst';
 export const PayTypes: number[] = [1, 2, 3];
 // mock tableListDataSource
 const genList = (current: number, pageSize: number) => {
   console.log('saleOrder init data');
-  const tableListDataSource: API.SaleOrderListItem[] = [];
-
-  for (let i = 0; i < pageSize; i += 1) {
-    const index: number = (current - 1) * 10 + i;
-
+  const tableListDataSource: API.StoreProductStockListItem[] = [];
+  const accountItem = AccountDataSource[Random.natural(0, AccountDataSource.length - 1)];
+  let storeItem: API.StoreListItem = { id: 0, name: '', createdAt: 0 };
+  StoreDataSource.forEach((store) => {
+    if (store.id === accountItem.storeRelation?.storeId) {
+      storeItem = store;
+    }
+  });
+  for (let i = 0; i < ProductDataSource.length; i += 1) {
+    const productItem = ProductDataSource[i];
     tableListDataSource.push({
-      id: index + 1,
-      key: `${index + 1}`,
-      storeId: index + 1,
-      storeName: `店名_${index + 1}`,
-      orderNo: dayjs()
-        .add(-(pageSize - i), 'day')
-        .format('YYYYMMDDHHmmss'),
-      totalPrice: 10,
-      accountId: 1,
-      accountName: `收银员_${(index % 3) + 1}`,
-      payType: PayTypes[Math.ceil(Math.random() * 2) + 1],
-      payTime: dayjs()
-        .add(-(pageSize - i), 'day')
-        .add(50, 'second')
-        .valueOf(),
+      id: productItem.id,
+      key: `${productItem.id}`,
+      storeId: storeItem.id,
+      storeName: storeItem.name,
+      productId: productItem.id,
+      productName: productItem.name,
+      stock: Random.natural(0, 1000),
       createdAt: dayjs()
         .add(-(pageSize - i), 'day')
         .valueOf(),
@@ -44,7 +47,7 @@ const tableListDataSource = genList(1, 100);
  * 拷贝数据
  */
 function cloneDataSource() {
-  const data: API.SaleOrderListItem[] = [];
+  const data: API.StoreProductStockListItem[] = [];
   tableListDataSource.forEach((item) => {
     data.push(item);
   });
@@ -90,9 +93,6 @@ function findPage(req: Request, res: Response, u: string) {
   console.log('params----->', params);
   if (params.id) {
     tempDataSource = tempDataSource.filter((data) => data?.id === parseInt(`${params.id}`, 10));
-  }
-  if (params.orderNo) {
-    tempDataSource = tempDataSource.filter((data) => data?.orderNo?.includes(params.orderNo || ''));
   }
   if (params.storeName) {
     tempDataSource = tempDataSource.filter((data) =>

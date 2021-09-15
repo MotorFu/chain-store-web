@@ -249,7 +249,7 @@ const AccountTable: React.FC = () => {
     <PageContainer>
       <ProTable<API.AccountListItem, API.PageParams>
         pagination={PaginationConfig}
-        headerTitle={'headerTitle'}
+        headerTitle={''}
         actionRef={actionRef}
         rowKey="key"
         search={{
