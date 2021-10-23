@@ -30,7 +30,6 @@ const genList = (current: number, pageSize: number) => {
         createdAt: dayjs()
           .add(-(pageSize - i), 'day')
           .valueOf(),
-        children: [],
       });
     }
 
@@ -153,8 +152,8 @@ function updateEnabledFunc(req: Request, res: Response) {
     item.enabled = !enabled;
   } else {
     const parentItem = tableListDataSource.filter((it) => it.id === parentId)[0];
-    const childItem = parentItem.children.filter((it) => it.id === id)[0];
-    childItem.enabled = !enabled;
+    const childItem = parentItem.children?.filter((it) => it.id === id)[0];
+    if (childItem) childItem.enabled = !enabled;
   }
   res.send({ status: 'ok', success: true });
 }

@@ -100,7 +100,7 @@ declare namespace API {
     id: number;
     key?: string;
     name: string;
-    image?: string;
+    image: string;
     description?: string;
     unit?: string;
     originalPrice: number;
@@ -120,7 +120,7 @@ declare namespace API {
     level: number;
     parentId: number;
     name: string;
-    children: API.CategoryListItem[];
+    children?: API.CategoryListItem[];
   } & BaseItem;
 
   type SaleOrderList = {
@@ -196,6 +196,7 @@ declare namespace API {
     storeName: string;
     productId: number;
     productName: string;
+    productImage: string;
     stock: number;
     createdAt?: number;
   };
@@ -216,6 +217,7 @@ declare namespace API {
     storeId: number;
     storeName: string;
     orderNo: string;
+    productCount: number;
     status: PurchaseOrderStatus;
     createdAt?: number;
   };
@@ -258,8 +260,9 @@ declare namespace API {
     storeName: string;
     orderNo: string;
     source: StockInOrderSource;
-    sourceOrderId: number; //1:草稿，2：待入库，3：已入库
-    status: StockInOrderStatus;
+    sourceOrderId?: number;
+    productCount: number;
+    status: StockInOrderStatus; //1:草稿，2：待入库，3：已入库
     createdAt?: number;
   };
 

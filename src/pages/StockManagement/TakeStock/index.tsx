@@ -1,14 +1,15 @@
 import React, { useState, useRef } from 'react';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import ProTable, { ActionType, ProColumns } from '@ant-design/pro-table';
-import { Button, Drawer, Space } from 'antd';
+import { Button, Drawer, Modal, Space, Tag } from 'antd';
 
 import {
   findTakeStockOrder,
   removeTakeStockOrder,
 } from '@/services/chain-store/StockApi/TakeStockOrder';
 import ProDescriptions, { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
-import { PaginationConfig } from '@/StoreConst';
+import { PaginationConfig, TakeStockStatusOptions } from '@/StoreConst';
+import { PlusOutlined } from '@ant-design/icons';
 
 const SaleOrderTable: React.FC = () => {
   const [showViewDrawer, setShowViewDrawer] = useState(false);
@@ -20,7 +21,7 @@ const SaleOrderTable: React.FC = () => {
 
   const columns: ProColumns<API.StoreTakeStockOrderListItem>[] = [
     {
-      title: '订单ID',
+      title: 'ID',
       key: 'id',
       dataIndex: 'id',
       sorter: true,
@@ -30,16 +31,24 @@ const SaleOrderTable: React.FC = () => {
       key: 'orderNo',
       dataIndex: 'orderNo',
     },
-
-    {
-      title: '盘点商品数',
-      key: 'productCount',
-      dataIndex: 'productCount',
-    },
     {
       title: '门店',
       key: 'storeName',
       dataIndex: 'storeName',
+    },
+    {
+      title: '商品数',
+      key: 'productCount',
+      dataIndex: 'productCount',
+    },
+    {
+      title: '状态',
+      key: 'status',
+      dataIndex: 'status',
+      render: (_, item) => {
+        const statusOption = TakeStockStatusOptions[item.status];
+        return <Tag color={statusOption.color}>{statusOption.label}</Tag>;
+      },
     },
     {
       title: '创建时间',
@@ -69,10 +78,29 @@ const SaleOrderTable: React.FC = () => {
           <a onClick={() => {}} key="edit">
             编辑
           </a>
+          <a key="delete" onClick={() => removeFunc(item)}>
+            删除
+          </a>
         </Space>
       ),
     },
   ];
+  function removeFunc(item: API.StoreTakeStockOrderListItem) {
+    Modal.confirm({
+      title: '提示',
+      content: <div>确定要删除【{item.orderNo}】盘点单？</div>,
+      onOk: async () => {
+        const success = await removeTakeStockOrder({
+          data: [item],
+        });
+        if (success) {
+          if (actionRef.current) {
+            actionRef.current.reload();
+          }
+        }
+      },
+    });
+  }
   return (
     <PageContainer>
       <ProTable<API.StoreTakeStockOrderListItem, API.PageParams>
@@ -83,6 +111,11 @@ const SaleOrderTable: React.FC = () => {
         search={{
           labelWidth: 120,
         }}
+        toolBarRender={() => [
+          <Button type="primary" key="primary" onClick={() => {}}>
+            <PlusOutlined /> 添加
+          </Button>,
+        ]}
         request={findTakeStockOrder}
         columns={columns}
         rowSelection={{

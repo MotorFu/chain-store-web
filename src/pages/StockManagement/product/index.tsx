@@ -21,6 +21,13 @@ const SaleOrderTable: React.FC = () => {
       sorter: true,
     },
     {
+      title: '图片',
+      key: 'productImage',
+      dataIndex: 'productImage',
+      valueType: 'image',
+      hideInSearch: true,
+    },
+    {
       title: '商品名',
       key: 'productName',
       dataIndex: 'productName',

@@ -1,11 +1,12 @@
 import React, { useState, useRef } from 'react';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import ProTable, { ActionType, ProColumns } from '@ant-design/pro-table';
-import { Button, Drawer, Space } from 'antd';
+import { Button, Drawer, Modal, Space, Tag } from 'antd';
 
 import { findStockInOrder, removeStockInOrder } from '@/services/chain-store/StockApi/StockInOrder';
 import ProDescriptions, { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
-import { PaginationConfig } from '@/StoreConst';
+import { StockInTypeOptions, PaginationConfig, StockInStatusOptions } from '@/StoreConst';
+import { PlusOutlined } from '@ant-design/icons';
 
 const SaleOrderTable: React.FC = () => {
   const [showViewDrawer, setShowViewDrawer] = useState(false);
@@ -17,7 +18,7 @@ const SaleOrderTable: React.FC = () => {
 
   const columns: ProColumns<API.StoreStockInOrderListItem>[] = [
     {
-      title: '订单ID',
+      title: 'ID',
       key: 'id',
       dataIndex: 'id',
       sorter: true,
@@ -33,21 +34,39 @@ const SaleOrderTable: React.FC = () => {
       dataIndex: 'storeName',
     },
     {
+      title: '商品数',
+      key: 'productCount',
+      dataIndex: 'productCount',
+    },
+    {
       title: '来源',
       key: 'source',
       dataIndex: 'source',
+      render: (_, item) => {
+        if (item.source) {
+          return StockInTypeOptions[item.source].label;
+        }
+        return '未知';
+      },
     },
 
     {
       title: '来源ID',
       key: 'sourceOrderId',
       dataIndex: 'sourceOrderId',
+      render: (_, item) => {
+        return item.sourceOrderId ? item.sourceOrderId : '-';
+      },
     },
 
     {
       title: '状态',
       key: 'status',
       dataIndex: 'status',
+      render: (_, item) => {
+        const statusOption = StockInStatusOptions[item.status];
+        return <Tag color={statusOption.color}>{statusOption.label}</Tag>;
+      },
     },
 
     {
@@ -78,10 +97,29 @@ const SaleOrderTable: React.FC = () => {
           <a onClick={() => {}} key="edit">
             编辑
           </a>
+          <a key="delete" onClick={() => removeFunc(item)}>
+            删除
+          </a>
         </Space>
       ),
     },
   ];
+  function removeFunc(item: API.StoreStockInOrderListItem) {
+    Modal.confirm({
+      title: '提示',
+      content: <div>确定要删除【{item.orderNo}】入库单？</div>,
+      onOk: async () => {
+        const success = await removeStockInOrder({
+          data: [item],
+        });
+        if (success) {
+          if (actionRef.current) {
+            actionRef.current.reload();
+          }
+        }
+      },
+    });
+  }
   return (
     <PageContainer>
       <ProTable<API.StoreStockInOrderListItem, API.PageParams>
@@ -92,6 +130,11 @@ const SaleOrderTable: React.FC = () => {
         search={{
           labelWidth: 120,
         }}
+        toolBarRender={() => [
+          <Button type="primary" key="primary" onClick={() => {}}>
+            <PlusOutlined /> 添加
+          </Button>,
+        ]}
         request={findStockInOrder}
         columns={columns}
         rowSelection={{

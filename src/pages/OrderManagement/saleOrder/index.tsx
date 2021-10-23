@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import ProTable, { ActionType, ProColumns } from '@ant-design/pro-table';
-import { Button, Drawer, Space } from 'antd';
+import { Button, Drawer, Space, Tag } from 'antd';
 
 import { findSaleOrder, removeSaleOrder } from '@/services/chain-store/SaleOrderApi';
 import ProDescriptions, { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
@@ -33,7 +33,7 @@ const SaleOrderTable: React.FC = () => {
       dataIndex: 'storeName',
     },
     {
-      title: '总售价',
+      title: '总售价(元)',
       key: 'totalPrice',
       dataIndex: 'totalPrice',
       render: (_, item) => {
@@ -42,7 +42,7 @@ const SaleOrderTable: React.FC = () => {
     },
 
     {
-      title: '收银员名称',
+      title: '收银员',
       key: 'accountName',
       dataIndex: 'accountName',
     },
@@ -51,10 +51,8 @@ const SaleOrderTable: React.FC = () => {
       key: 'payType',
       dataIndex: 'payType',
       render: (_, item) => {
-        if (item.payType) {
-          return OrderPayTypeOptions[item.payType].label;
-        }
-        return '未知';
+        const typeOption = OrderPayTypeOptions[item.payType];
+        return <Tag color={typeOption.color}>{typeOption.label}</Tag>;
       },
     },
     {

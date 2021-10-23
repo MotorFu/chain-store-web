@@ -30,14 +30,98 @@ export const OrderPayTypeOptions = [
   {
     value: 1,
     label: '现金',
+    color: '#ff7b7b',
   },
   {
     value: 2,
     label: '支付宝',
+    color: '#03a6fc',
   },
   {
     value: 3,
     label: '微信',
+    color: '#62e367',
+  },
+];
+
+export const PurchaseStatusOptions = [
+  {
+    value: 0,
+    label: '不限',
+  },
+  {
+    value: 1,
+    label: '草稿',
+    color: '#ccc',
+  },
+  {
+    value: 2,
+    label: '待采购',
+    color: '#03a6fc',
+  },
+  {
+    value: 3,
+    label: '采购完成',
+    color: '#28c522',
+  },
+];
+
+export const StockInTypeOptions = [
+  {
+    value: 0,
+    label: '不限',
+  },
+  {
+    value: 1,
+    label: '普通入库',
+  },
+  {
+    value: 2,
+    label: '采购入库',
+  },
+];
+
+export const StockInStatusOptions = [
+  {
+    value: 0,
+    label: '不限',
+  },
+  {
+    value: 1,
+    label: '草稿',
+    color: '#ccc',
+  },
+  {
+    value: 2,
+    label: '待入库',
+    color: '#03a6fc',
+  },
+  {
+    value: 3,
+    label: '入库完成',
+    color: '#28c522',
+  },
+];
+
+export const TakeStockStatusOptions = [
+  {
+    value: 0,
+    label: '不限',
+  },
+  {
+    value: 1,
+    label: '草稿',
+    color: '#ccc',
+  },
+  {
+    value: 2,
+    label: '待盘点',
+    color: '#03a6fc',
+  },
+  {
+    value: 3,
+    label: '盘点完成',
+    color: '#28c522',
   },
 ];
 

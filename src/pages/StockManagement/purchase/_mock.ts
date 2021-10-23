@@ -2,25 +2,35 @@ import type { Request, Response } from 'express';
 import dayjs from 'dayjs';
 import { parse } from 'url';
 import { parseInt } from 'lodash';
+import { tableListDataSource as AccountDataSource } from '../../AccountManagement/account/_mock';
+import { Random } from 'mockjs';
+import { tableListDataSource as StoreDataSource } from '../../AccountManagement/store/_mock';
 // import { PayTypes } from '@/services/SysConst';
 export const PayTypes: number[] = [1, 2, 3];
 // mock tableListDataSource
 const genList = (current: number, pageSize: number) => {
-  console.log('saleOrder init data');
+  console.log('purchase order init data');
   const tableListDataSource: API.StorePurchaseOrderListItem[] = [];
-
+  const accountItem = AccountDataSource[Random.natural(0, AccountDataSource.length - 1)];
+  let storeItem: API.StoreListItem = { id: 0, name: '', createdAt: 0 };
+  StoreDataSource.forEach((store) => {
+    if (store.id === accountItem.storeRelation?.storeId) {
+      storeItem = store;
+    }
+  });
   for (let i = 0; i < pageSize; i += 1) {
     const index: number = (current - 1) * 10 + i;
 
     tableListDataSource.push({
       id: index + 1,
       key: `${index + 1}`,
-      storeId: index + 1,
-      storeName: `采购单_${index + 1}`,
-      orderNo: dayjs()
+      storeId: storeItem.id,
+      storeName: storeItem.name,
+      orderNo: `PO_${dayjs()
         .add(-(pageSize - i), 'day')
-        .format('YYYYMMDDHHmmss'),
-      status: 1,
+        .format('YYYYMMDDHHmmss')}`,
+      productCount: Random.natural(1, 30),
+      status: Random.natural(1, 3),
       createdAt: dayjs()
         .add(-(pageSize - i), 'day')
         .valueOf(),
@@ -31,7 +41,7 @@ const genList = (current: number, pageSize: number) => {
 };
 
 // 源数据
-const tableListDataSource = genList(1, 100);
+export const tableListDataSource = genList(1, 100);
 
 /**
  * 拷贝数据

@@ -23,10 +23,9 @@ export async function findPurchaseOrder(
   });
 }
 
-export async function removePurchaseOrder(ids: number[], options?: { [key: string]: any }) {
+export async function removePurchaseOrder(options?: { [key: string]: any }) {
   return request<Record<string, any>>(`/api/store/purchase/order`, {
     method: 'DELETE',
-    data: ids,
     ...(options || {}),
   });
 }

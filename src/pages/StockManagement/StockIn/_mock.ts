@@ -2,31 +2,45 @@ import type { Request, Response } from 'express';
 import dayjs from 'dayjs';
 import { parse } from 'url';
 import { parseInt } from 'lodash';
+import { tableListDataSource as AccountDataSource } from '../../AccountManagement/account/_mock';
+import { Random } from 'mockjs';
+import { tableListDataSource as StoreDataSource } from '../../AccountManagement/store/_mock';
+import { tableListDataSource as PurchaseDataSource } from '../../StockManagement/purchase/_mock';
+
 // mock tableListDataSource
 
-const status: API.StockInOrderStatus[] = [1, 2, 3];
 const genList = (current: number, pageSize: number) => {
-  console.log('saleOrder init data');
+  console.log('stock in order init data');
   const tableListDataSource: API.StoreStockInOrderListItem[] = [];
-
+  const accountItem = AccountDataSource[Random.natural(0, AccountDataSource.length - 1)];
+  let storeItem: API.StoreListItem = { id: 0, name: '', createdAt: 0 };
+  StoreDataSource.forEach((store) => {
+    if (store.id === accountItem.storeRelation?.storeId) {
+      storeItem = store;
+    }
+  });
   for (let i = 0; i < pageSize; i += 1) {
     const index: number = (current - 1) * 10 + i;
 
-    tableListDataSource.push({
+    const item: API.StoreStockInOrderListItem = {
       id: index + 1,
       key: `${index + 1}`,
-      storeId: index + 1,
-      storeName: `店名_${index + 1}`,
-      orderNo: dayjs()
+      storeId: storeItem.id,
+      storeName: storeItem.name,
+      orderNo: `SIO_${dayjs()
         .add(-(pageSize - i), 'day')
-        .format('YYYYMMDDHHmmss'),
-      source: 1,
-      sourceOrderId: index + 1,
-      status: status[Math.ceil(Math.random() * 3) - 1],
+        .format('YYYYMMDDHHmmss')}`,
+      source: Random.natural(1, 2),
+      productCount: Random.natural(1, 20),
+      status: Random.natural(1, 3),
       createdAt: dayjs()
         .add(-(pageSize - i), 'day')
         .valueOf(),
-    });
+    };
+    if (item.source === 2) {
+      item.sourceOrderId = PurchaseDataSource[Random.natural(0, PurchaseDataSource.length - 1)].id;
+    }
+    tableListDataSource.push(item);
   }
   tableListDataSource.reverse();
   return tableListDataSource;

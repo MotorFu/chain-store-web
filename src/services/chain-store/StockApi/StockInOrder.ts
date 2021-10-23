@@ -23,10 +23,9 @@ export async function findStockInOrder(
   });
 }
 
-export async function removeStockInOrder(ids: number[], options?: { [key: string]: any }) {
+export async function removeStockInOrder(options?: { [key: string]: any }) {
   return request<Record<string, any>>(`/api/store/stockIn/order`, {
     method: 'DELETE',
-    data: ids,
     ...(options || {}),
   });
 }

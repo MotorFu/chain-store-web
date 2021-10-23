@@ -1,14 +1,15 @@
 import React, { useState, useRef } from 'react';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
 import ProTable, { ActionType, ProColumns } from '@ant-design/pro-table';
-import { Button, Drawer, Space } from 'antd';
+import { Button, Drawer, Modal, Space, Tag } from 'antd';
 
 import {
   findPurchaseOrder,
   removePurchaseOrder,
 } from '@/services/chain-store/StockApi/PurchaseOrder';
 import ProDescriptions, { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
-import { PaginationConfig } from '@/StoreConst';
+import { PaginationConfig, PurchaseStatusOptions } from '@/StoreConst';
+import { PlusOutlined } from '@ant-design/icons';
 
 const SaleOrderTable: React.FC = () => {
   const [showViewDrawer, setShowViewDrawer] = useState(false);
@@ -20,7 +21,7 @@ const SaleOrderTable: React.FC = () => {
 
   const columns: ProColumns<API.StorePurchaseOrderListItem>[] = [
     {
-      title: '订单ID',
+      title: 'ID',
       key: 'id',
       dataIndex: 'id',
       sorter: true,
@@ -36,9 +37,18 @@ const SaleOrderTable: React.FC = () => {
       dataIndex: 'storeName',
     },
     {
+      title: '商品数',
+      key: 'productCount',
+      dataIndex: 'productCount',
+    },
+    {
       title: '状态',
       key: 'status',
       dataIndex: 'status',
+      render: (_, item) => {
+        const statusOption = PurchaseStatusOptions[item.status];
+        return <Tag color={statusOption.color}>{statusOption.label}</Tag>;
+      },
     },
 
     {
@@ -69,10 +79,30 @@ const SaleOrderTable: React.FC = () => {
           <a onClick={() => {}} key="edit">
             编辑
           </a>
+          <a key="delete" onClick={() => removeFunc(item)}>
+            删除
+          </a>
         </Space>
       ),
     },
   ];
+
+  function removeFunc(item: API.StorePurchaseOrderListItem) {
+    Modal.confirm({
+      title: '提示',
+      content: <div>确定要删除【{item.orderNo}】采购单？</div>,
+      onOk: async () => {
+        const success = await removePurchaseOrder({
+          data: [item],
+        });
+        if (success) {
+          if (actionRef.current) {
+            actionRef.current.reload();
+          }
+        }
+      },
+    });
+  }
   return (
     <PageContainer>
       <ProTable<API.StorePurchaseOrderListItem, API.PageParams>
@@ -83,6 +113,11 @@ const SaleOrderTable: React.FC = () => {
         search={{
           labelWidth: 120,
         }}
+        toolBarRender={() => [
+          <Button type="primary" key="primary" onClick={() => {}}>
+            <PlusOutlined /> 添加
+          </Button>,
+        ]}
         request={findPurchaseOrder}
         columns={columns}
         rowSelection={{

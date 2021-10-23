@@ -30,6 +30,7 @@ const genList = (current: number, pageSize: number) => {
       storeName: storeItem.name,
       productId: productItem.id,
       productName: productItem.name,
+      productImage: productItem.image,
       stock: Random.natural(0, 1000),
       createdAt: dayjs()
         .add(-(pageSize - i), 'day')
